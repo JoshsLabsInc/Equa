@@ -55,7 +55,7 @@
         }
 
         .logo-icon img {
-            height: 296px;
+            height: 196px;
             object-fit: contain;
             display: block;
         }
@@ -680,7 +680,7 @@
         </footer>
     </div>
     <script>
-        console.log("Josh's Labs est 2024");
+        console.log("<<Josh's Labs est 2024>>");
         const modal = document.getElementById('wrappedModal');
         const analyticsTab = document.getElementById('analyticsTab');
         const closeBtn = document.getElementById('closeModalBtn');
@@ -731,6 +731,54 @@
                 addUserMessage(chatInput.value);
                 chatInput.value = '';
             }
+        });
+    </script>
+    <script>
+        function checkScreenSize() {
+        const mobileBreakpoint = 768;
+        const isMobilePage = window.location.pathname.includes('mobile-index.html');
+        const isDesktopPage = !isMobilePage && window.location.pathname.includes('index.html');
+        const isMobileSize = window.innerWidth <= mobileBreakpoint;
+        
+        // Check if user has manually overridden the detection
+        const userPreference = sessionStorage.getItem('preferredView');
+        
+        // Redirect logic
+        if (userPreference === 'mobile' && !isMobilePage) {
+            window.location.href = 'mobile-index.html';
+            return;
+        } else if (userPreference === 'desktop' && isMobilePage) {
+            window.location.href = 'index.html';
+            return;
+        }
+        
+        // Auto-detect if no user preference set
+        if (isMobileSize && !isMobilePage) {
+            window.location.href = 'mobile-index.html';
+        } else if (!isMobileSize && isMobilePage) {
+            window.location.href = 'index.html';
+        }
+        }
+
+        // Add view toggle buttons to your pages (call these functions when buttons are clicked)
+        function forceMobileView() {
+        sessionStorage.setItem('preferredView', 'mobile');
+        window.location.href = 'mobile-index.html';
+        }
+
+        function forceDesktopView() {
+        sessionStorage.setItem('preferredView', 'desktop');
+        window.location.href = 'index.html';
+        }
+
+        // Initial check
+        checkScreenSize();
+
+        // Debounced resize handler
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(checkScreenSize, 200);
         });
     </script>
 </body>
