@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equa · your AI math coach</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fb;
+            color: #1b2b4b;
+            line-height: 1.5;
+        }
+
+        .app {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .logo-icon {
+            width: 96px;
+            height: 96px;
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon img {
+            height: 296px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .logo h1 {
+            font-weight: 700;
+            font-size: 3.2rem;
+            letter-spacing: -0.03em;
+            background: linear-gradient(145deg, #1a2c49, #2c3f64);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        .logo-icon {
+            background: transparent;
+            border: none;
+        }
+
+        .badge {
+            background: #dde3ed;
+            color: #1f3a6b;
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: white;
+            padding: 0.4rem 0.8rem 0.4rem 1.2rem;
+            border-radius: 60px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.02);
+            border: 1px solid #eef2f7;
+        }
+        .user-profile i {
+            color: #3f5e8c;
+        }
+        .avatar-small {
+            background: #2a3f64;
+            width: 38px;
+            height: 38px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        .modes-section h2 {
+            font-size: 1.7rem;
+            font-weight: 650;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .welcome-message {
+            color: #4d6587;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            border-left: 4px solid #2b4bff;
+            padding-left: 1rem;
+            background: #f0f4fe;
+            border-radius: 0 12px 12px 0;
+            padding: 0.8rem 1.2rem;
+        }
+
+        .mode-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .mode-item {
+            background: white;
+            border-radius: 28px;
+            padding: 1.2rem 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1.8rem;
+            box-shadow: 0 8px 18px -8px rgba(20, 30, 50, 0.06);
+            border: 1px solid #eef2f8;
+            transition: all 0.25s ease;
+            position: relative;
+            cursor: default;
+        }
+        .mode-item:hover {
+            transform: scale(1.01) translateY(-2px);
+            border-color: #b7cef8;
+            box-shadow: 0 20px 24px -12px rgba(37, 99, 235, 0.15);
+        }
+
+        .mode-icon {
+            width: 64px;
+            height: 64px;
+            background: #edf2fc;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            color: #2b4bff;
+            transition: 0.2s;
+        }
+        .mode-item:hover .mode-icon {
+            background: #e0eaff;
+        }
+
+        .mode-content {
+            flex: 1;
+        }
+        .mode-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.2rem;
+        }
+        .mode-desc-short {
+            color: #5c6f91;
+            font-weight: 400;
+        }
+
+        .hover-bubble {
+            position: absolute;
+            right: 25px;
+            top: -15px;
+            background: #1e293b;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px 40px 40px 8px;
+            font-size: 0.9rem;
+            max-width: 260px;
+            box-shadow: 0 15px 25px -8px #0e1e3a;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.15s ease;
+            transform: translateY(6px);
+            z-index: 10;
+            font-weight: 450;
+            line-height: 1.4;
+            backdrop-filter: blur(2px);
+            border: 1px solid #ffffff20;
+        }
+        .mode-item:hover .hover-bubble {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Right panel: AI coach chatbox */
+        .ai-coach-panel {
+            background: white;
+            border-radius: 36px;
+            padding: 1.8rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 30px -10px rgba(16, 34, 64, 0.12);
+            border: 1px solid #eef3fc;
+            height: fit-content;
+            position: sticky;
+            top: 1.5rem;
+        }
+
+        .coach-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .coach-avatar-large {
+            background: linear-gradient(145deg, #294a7a, #10233f);
+            width: 70px;
+            height: 70px;
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #ffecbb;
+            box-shadow: 0 12px 14px -8px #10233f40;
+        }
+        .coach-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .coach-info p {
+            color: #4b6a96;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        .memory-badge {
+            background: #e2ecfe;
+            color: #1f449b;
+            border-radius: 40px;
+            padding: 0.2rem 0.7rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .chat-window {
+            background: #f7f9fd;
+            border-radius: 28px;
+            padding: 1.5rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            max-height: 280px;
+            overflow-y: auto;
+            border: 1px solid #eef2f9;
+        }
+        .message {
+            display: flex;
+            gap: 0.7rem;
+            align-items: flex-end;
+        }
+        .message.bot .msg-bubble {
+            background: white;
+            border-radius: 22px 22px 22px 8px;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #e0e7f2;
+            color: #1b2b4b;
+            max-width: 85%;
+            box-shadow: 0 3px 8px #e2e8f0;
+        }
+        .message.user {
+            flex-direction: row-reverse;
+        }
+        .message.user .msg-bubble {
+            background: #2b4bff;
+            color: white;
+            border-radius: 22px 22px 8px 22px;
+            padding: 0.8rem 1.2rem;
+            max-width: 85%;
+        }
+        .msg-time {
+            font-size: 0.7rem;
+            color: #8699bb;
+            margin-top: 4px;
+            margin-left: 6px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            background: #f1f5fb;
+            border-radius: 50px;
+            padding: 0.3rem 0.3rem 0.3rem 1.2rem;
+            align-items: center;
+            border: 1px solid #dbe2f0;
+        }
+        .chat-input-area input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 0.8rem 0;
+            font-size: 0.95rem;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .chat-input-area button {
+            background: #2b4bff;
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 6px 12px -5px #2b4bff80;
+        }
+        .chat-input-area button:hover {
+            background: #1f3ed0;
+            transform: scale(0.97);
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 2rem 0 0.5rem;
+            background: #f8faff;
+            padding: 1rem 1.5rem;
+            border-radius: 70px;
+            border: 1px solid #e2ecfe;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.4rem;
+        }
+        .stat-label {
+            color: #5a6f97;
+            font-size: 0.8rem;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(3px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            max-width: 700px;
+            width: 90%;
+            background: white;
+            border-radius: 48px;
+            padding: 2.2rem 2rem;
+            box-shadow: 0 40px 60px -10px #10233f;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 22px; right: 28px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #7e93bb;
+            transition: 0.1s;
+        }
+        .close-modal:hover {
+            color: #1b2b4b;
+        }
+
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 1.5rem;
+            padding: 1rem 0.2rem 2rem 0.2rem;
+            scrollbar-width: thin;
+            scrollbar-color: #2b4bff #dbe2f0;
+        }
+        .carousel::-webkit-scrollbar {
+            height: 8px;
+        }
+        .carousel::-webkit-scrollbar-thumb {
+            background: #2b4bff;
+            border-radius: 20px;
+        }
+        .slide {
+            scroll-snap-align: start;
+            min-width: 280px;
+            background: linear-gradient(145deg, #f9e5b7, #ffe0a8);
+            border-radius: 36px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
+            color: #1f2a44;
+            flex-shrink: 0;
+        }
+        .slide:nth-child(2) { background: linear-gradient(145deg, #b7e0ff, #8fcaff); }
+        .slide:nth-child(3) { background: linear-gradient(145deg, #c0e5d9, #a2d4c4); }
+        .slide:nth-child(4) { background: linear-gradient(145deg, #fbc0cb, #ffb3c1); }
+        .slide h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .big-number {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: 0.5rem 0;
+        }
+        .topic-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+        }
+        .highlight {
+            background: #ffecbb;
+            border-radius: 60px;
+            padding: 0.4rem 1rem;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .more-info-btn {
+            background: #1e293b;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 8px 12px -8px #0a1a2f;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .more-info-btn:hover {
+            background: #2d405c;
+            transform: scale(1.02);
+        }
+
+        @keyframes gentle-pulse {
+            0% { box-shadow: 0 0 0 0 #b7c9fd; }
+            70% { box-shadow: 0 0 0 5px rgba(43, 75, 255, 0.1); }
+        }
+        .mode-item {
+            animation: gentle-pulse 4s infinite ease;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .ai-coach-panel {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-overlay" id="wrappedModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModalBtn">&times;</span>
+            <h2 style="font-size: 2.2rem; margin-bottom: 1rem;">📊 Your Math Wrapped</h2>
+            <p style="color:#3b5780; margin-bottom: 1.2rem; font-weight: 500;">· This month in review</p>
+            <div class="carousel">
+                <div class="slide">
+                    <h3>🧮 total problems</h3>
+                    <div class="big-number">1,284</div>
+                    <p style="font-size: 1.2rem;">+23% vs last month</p>
+                    <div style="margin-top:1.8rem;"><i class="fas fa-bolt"></i> that's 42 per day!</div>
+                </div>
+                <div class="slide">
+                    <h3>📈 topic mastery</h3>
+                    <div class="topic-row"><span>derivatives</span> <span>+18%</span></div>
+                    <div class="topic-row"><span>limits</span> <span>+9%</span></div>
+                    <div class="topic-row"><span>integration</span> <span>+27% 🔥</span></div>
+                    <div style="margin-top:1rem;"><span class="highlight">chain rule: +34%</span></div>
+                </div>
+                <div class="slide">
+                    <h3>⚔️ battle stats</h3>
+                    <div class="big-number">47</div>
+                    <p>battles joined · win rate 62%</p>
+                    <div style="margin-top:1rem;">🏆 top 15% rank</div>
+                </div>
+                <div class="slide">
+                    <h3>⏱️ speed & ELO</h3>
+                    <div>avg solve: 1m 07s</div>
+                    <div class="big-number">+112</div>
+                    <p>ELO gained this month</p>
+                    <div style="background:#2b4bff40; border-radius:40px; padding:0.5rem;">current: 843</div>
+                </div>
+            </div>
+            <p style="text-align:center; margin-top:1.5rem; color:#3c5984;"><i class="fas fa-star"></i> You're in the top 20% of consistency <i class="fas fa-star"></i></p>
+        </div>
+    </div>
+
+    <div class="app">
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="logo.png" alt="Equa logo"></i>
+                    <i class="fas fa-image" style="display:none;"></i>
+                </div>
+                <p> </p>
+                <span class="badge"><i class="fas fa-robot"></i> AI math coach</span>
+            </div>
+            <div style="display:flex; gap:0.8rem; align-items:center;">
+                <button class="more-info-btn" onclick="window.location.href='info.html';"><i class="fas fa-info-circle"></i> More info</button>
+                <div class="user-profile">
+                    <i class="fas fa-star" style="color: #f5b342;"></i>
+                    <span>ELO 843</span>
+                    <div class="avatar-small">JS</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="modes-section">
+                <div class="welcome-message">
+                    <i class="fas fa-hand-wave" style="color:#2b4bff; margin-right:0.5rem;"></i> 
+                    Welcome back, Josh. Your AI coach Maya has prepared new challenges based on your last session.
+                </div>
+                <h2><i class="fas fa-bolt" style="color:#2b4bff;"></i> practice modes</h2>
+
+                <div class="mode-cards">
+                    <div class="mode-item">
+                        <div class="mode-icon"><i class="fas fa-user-robot"></i></div>
+                        <div class="mode-content">
+                            <div class="mode-title">VS mode</div>
+                            <div class="mode-desc-short">race against a simulated opponent</div>
+                        </div>
+                        <div class="hover-bubble">
+                            <i class="fas fa-robot" style="margin-right:6px;"></i> 
+                            Compete against an AI opponent that adapts to your ELO. Chat bubbles show “thinking…” to mimic a real player. No grades, just fun repetition.
+                        </div>
+                    </div>
+
+                    <div class="mode-item">
+                        <div class="mode-icon"><i class="fas fa-users"></i></div>
+                        <div class="mode-content">
+                            <div class="mode-title">Battle mode</div>
+                            <div class="mode-desc-short">group rooms · team battle</div>
+                        </div>
+                        <div class="hover-bubble">
+                            <i class="fas fa-users" style="margin-right:6px;"></i> 
+                            Create or join rooms with up to 20 players. Custom rules: time limits, team vs team, hints allowed? Perfect for recitations.
+                        </div>
+                    </div>
+
+                    <div class="mode-item">
+                        <div class="mode-icon"><i class="fas fa-trophy"></i></div>
+                        <div class="mode-content">
+                            <div class="mode-title">Ranked mode</div>
+                            <div class="mode-desc-short">ELO progression · timed</div>
+                        </div>
+                        <div class="hover-bubble">
+                            <i class="fas fa-chart-line" style="margin-right:6px;"></i> 
+                            Earn ELO points (≈25 per win). Randomized a·xⁿ problems, step validation, tab‑switch detection. Future grade integration.
+                        </div>
+                    </div>
+
+                    <div class="mode-item">
+                        <div class="mode-icon"><i class="fas fa-diagram-project"></i></div>
+                        <div class="mode-content">
+                            <div class="mode-title">Mastery path</div>
+                            <div class="mode-desc-short">unlock topics sequentially</div>
+                        </div>
+                        <div class="hover-bubble">
+                            <i class="fas fa-check-circle" style="margin-right:6px;"></i> 
+                            Master Limits → Derivatives → Applications → Integration. Diagnostic pre‑assessment generates your personal roadmap.
+                        </div>
+                    </div>
+
+                    <div class="mode-item">
+                        <div class="mode-icon"><i class="fas fa-pencil-alt"></i></div>
+                        <div class="mode-content">
+                            <div class="mode-title">Practice mode</div>
+                            <div class="mode-desc-short">free training · no pressure</div>
+                        </div>
+                        <div class="hover-bubble">
+                            <i class="fas fa-pencil-alt" style="margin-right:6px;"></i> 
+                            Endless randomly generated problems with step‑by‑step hints. Your AI coach guides you at your own pace.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-stats" style="cursor:pointer;" id="analyticsTab">
+                    <div class="stat-item"><span class="stat-value">14🔥</span> <span class="stat-label">day streak</span></div>
+                    <div class="stat-item"><span class="stat-value">87%</span> <span class="stat-label">derivatives</span></div>
+                    <div class="stat-item"><span class="stat-value">12</span> <span class="stat-label">badges</span></div>
+                    <div class="stat-item"><i class="fas fa-chart-pie" style="color:#2b4bff; font-size:1.8rem;"></i> <span class="stat-label">analytics</span></div>
+                </div>
+            </div>
+
+            <div class="ai-coach-panel">
+                <div class="coach-header">
+                    <div class="coach-avatar-large">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&hair=long&accessories=round&backgroundColor=b6e3f4,ffd5dc,ffdfbf" alt="Maya bitmoji" style="width:100%; height:100%; object-fit:cover; border-radius:26px;">
+                    </div>
+                    <div class="coach-info">
+                        <h3>Maya <span style="font-size:0.9rem; font-weight:400;">(your coach)</span></h3>
+                        <p><i class="fas fa-circle" style="color:#3bb55c; font-size:0.6rem;"></i> online · persistent memory</p>
+                        <span class="memory-badge"><i class="fas fa-brain"></i> 100% adaptive</span>
+                    </div>
+                </div>
+
+                <div class="chat-window" id="chatWindow">
+                    <div class="message bot">
+                        <div class="msg-bubble">
+                            👋 Hi Josh, ready to practice derivatives? I saw you struggled with the chain rule yesterday.
+                            <div class="msg-time">just now</div>
+                        </div>
+                    </div>
+                    <div class="message user">
+                        <div class="msg-bubble">
+                            yeah, let's do a few warm-ups. maybe vs mode?
+                            <div class="msg-time">a few sec ago</div>
+                        </div>
+                    </div>
+                    <div class="message bot">
+                        <div class="msg-bubble">
+                            Great choice! I'll adjust the opponent speed to be encouraging. Want a quick hint on the power rule first?
+                            <div class="msg-time">now</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" placeholder="Ask Maya..." id="chatInput">
+                    <button id="sendMsgBtn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <p style="font-size:0.75rem; color:#738eb0; margin-top:0.6rem; margin-left:0.3rem;">
+                    <i class="fas fa-palette"></i> avatar style: bitmoji‑like · you can change hair, skin, gender
+                </p>
+            </div>
+        </div>
+
+        <footer style="margin-top: 3rem; color:#6b7f9f; font-size:0.9rem; border-top: 1px solid #e1ebf5; padding-top: 1.5rem; text-align:center;">
+            Equa – adaptive AI math engine · blueprint by Josh Sooknanan · UI demo
+        </footer>
+    </div>
+    <script>
+        console.log("Josh's Labs est 2024");
+        const modal = document.getElementById('wrappedModal');
+        const analyticsTab = document.getElementById('analyticsTab');
+        const closeBtn = document.getElementById('closeModalBtn');
+
+        analyticsTab.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+
+        // chat simulation (same as before)
+        const sendBtn = document.getElementById('sendMsgBtn');
+        const chatInput = document.getElementById('chatInput');
+        const chatWindow = document.getElementById('chatWindow');
+
+        function addUserMessage(text) {
+            if (!text.trim()) return;
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message user';
+            msgDiv.innerHTML = `<div class="msg-bubble">${text}<div class="msg-time">just now</div></div>`;
+            chatWindow.appendChild(msgDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            setTimeout(() => {
+                const botDiv = document.createElement('div');
+                botDiv.className = 'message bot';
+                let answer = "I'm here to help! Try a mode from the left. 😊";
+                if (text.toLowerCase().includes('derivative')) answer = "Derivatives are my specialty! Want to try VS mode or a quick hint?";
+                else if (text.toLowerCase().includes('hint')) answer = "Sure! The power rule: d/dx (xⁿ) = n·xⁿ⁻¹. Example: d/dx (x⁴) = 4x³.";
+                botDiv.innerHTML = `<div class="msg-bubble">${answer}<div class="msg-time">now</div></div>`;
+                chatWindow.appendChild(botDiv);
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }, 400);
+        }
+
+        sendBtn.addEventListener('click', () => {
+            addUserMessage(chatInput.value);
+            chatInput.value = '';
+        });
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addUserMessage(chatInput.value);
+                chatInput.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
