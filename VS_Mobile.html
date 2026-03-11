@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Equa · VS mode mobile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #f0f4fa, #e6ecf5);
+            min-height: 100vh;
+            padding: 0.75rem;
+        }
+
+        /* mobile-first container */
+        .mobile-container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 2rem;
+            box-shadow: 0 15px 30px -10px #10224060;
+            padding: 1.2rem 1rem;
+            border: 1px solid #ffffff99;
+        }
+
+        /* header */
+        .mobile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .mobile-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #162b4a, #2f4674);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+        .opponent-badge {
+            background: #d9e2f0;
+            color: #1e3a5f;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .opponent-badge i {
+            margin-right: 4px;
+        }
+
+        /* opponent card - compact for mobile */
+        .opponent-card {
+            background: #ffffffd9;
+            backdrop-filter: blur(4px);
+            border-radius: 1.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 6px 12px -6px #1a2f4a30;
+        }
+        .opponent-avatar-small {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #edf2fc;
+            border: 2px solid white;
+            box-shadow: 0 6px 10px -4px #0e1e32;
+            flex-shrink: 0;
+        }
+        .opponent-avatar-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .opponent-info {
+            flex: 1;
+        }
+        .opponent-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #14273e;
+            line-height: 1.2;
+        }
+        .timer-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.2rem;
+        }
+        .timer-small {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: #e6edf8;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            color: #14273e;
+        }
+        .progress-small {
+            flex: 1;
+            height: 8px;
+            background: #d2def0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        #progress-mobile {
+            height: 8px;
+            background: linear-gradient(90deg, #3f66a0, #162b44);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        #opponent-status-mobile {
+            font-size: 0.75rem;
+            color: #3c5780;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        /* problem card */
+        .problem-card {
+            background: white;
+            border-radius: 1.8rem;
+            padding: 1.5rem 1.2rem;
+            box-shadow: 0 15px 20px -10px #1f3a6030;
+            margin-bottom: 1rem;
+        }
+        .problem-label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #38537b;
+            margin-bottom: 0.8rem;
+        }
+        .problem {
+            font-size: 2.4rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            background: #f2f6ff;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            color: #0a1a33;
+            border: 2px dashed #b3c7e8;
+            margin-bottom: 1.2rem;
+            word-break: break-word;
+        }
+        .answer-area {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+        #answer {
+            flex: 1;
+            padding: 0.9rem 1rem;
+            font-size: 1.2rem;
+            border: 2px solid #dbe2f0;
+            border-radius: 50px;
+            outline: none;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            background: white;
+        }
+        #answer:focus {
+            border-color: #1e3f70;
+            box-shadow: 0 0 0 3px rgba(30,63,112,0.1);
+        }
+        .action-btns {
+            display: flex;
+            gap: 0.6rem;
+        }
+        .btn {
+            flex: 1;
+            background: white;
+            border: none;
+            padding: 0.9rem 0.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: 1px solid #cdd9ec;
+            transition: 0.15s;
+            color: #1e2f4a;
+        }
+        .btn-primary {
+            background: #1e2f4a;
+            color: white;
+            border: none;
+            box-shadow: 0 5px 10px -4px #162b44;
+        }
+        .btn-primary:active {
+            background: #2b4062;
+            transform: scale(0.98);
+        }
+        .btn-secondary:active {
+            background: #e8f0fe;
+            transform: scale(0.98);
+        }
+
+        /* streak row */
+        .streak-row {
+            background: #ffffffc0;
+            border-radius: 50px;
+            padding: 0.7rem 1.2rem;
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            font-weight: 600;
+            color: #14273e;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        /* chat panel - Maya */
+        .chat-panel {
+            background: #ffffffd9;
+            backdrop-filter: blur(4px);
+            border-radius: 1.8rem;
+            padding: 1.2rem;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.8rem;
+        }
+        .maya-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #ffe0b0;
+            border: 2px solid white;
+        }
+        .maya-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .chat-header h4 {
+            font-size: 1.2rem;
+            color: #1d314b;
+        }
+        .chat-messages {
+            background: #f5f9ff;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            min-height: 100px;
+            max-height: 120px;
+            overflow-y: auto;
+            margin-bottom: 0.8rem;
+            border: 1px solid #d4e1f5;
+            font-size: 0.9rem;
+        }
+        .chat-messages div {
+            margin-bottom: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            background: white;
+            border-radius: 25px;
+            width: fit-content;
+            max-width: 90%;
+            box-shadow: 0 2px 6px #00000008;
+        }
+        .chat-messages .ai-message {
+            background: #1e2f4a;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        #chat-input {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.8rem 1rem;
+            border-radius: 40px;
+            border: 1px solid #c4d3ea;
+            outline: none;
+            font-size: 0.95rem;
+        }
+        .icon-btn {
+            background: #1e2f4a;
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 4px 8px -3px #1e2f4a80;
+            flex-shrink: 0;
+        }
+        .icon-btn:active {
+            background: #2e4570;
+            transform: scale(0.95);
+        }
+        .hint-btn {
+            background: #e6eefc;
+            color: #1e2f4a;
+            border: 1px solid #b5c9e8;
+            width: auto;
+            padding: 0 1.2rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: none;
+        }
+
+        /* modals - mobile optimized */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+        .modal-content {
+            background: white;
+            max-width: 380px;
+            width: 100%;
+            border-radius: 36px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 30px 40px -10px #0e1e32;
+        }
+        .modal-content h2 {
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+            color: #14273e;
+        }
+        .difficulty-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin: 1.5rem 0 1rem;
+        }
+        .difficulty-buttons button {
+            background: #f0f5ff;
+            border: none;
+            padding: 1rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1b314e;
+            cursor: pointer;
+            border: 1px solid #bdcff0;
+            transition: 0.15s;
+        }
+        .difficulty-buttons button:active {
+            background: #dae6ff;
+            transform: scale(0.98);
+        }
+        .close-modal {
+            margin-top: 1rem;
+            color: #6b85ac;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .modal-actions button {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            background: #1e2f4a;
+            color: white;
+        }
+        .modal-actions button:active {
+            transform: scale(0.98);
+        }
+        .modal-actions button.menu-btn {
+            background: #e2e9f5;
+            color: #1e2f4a;
+        }
+
+        footer {
+            text-align: center;
+            color: #5b7193;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- difficulty modal -->
+    <div id="difficultyModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>⚡ choose difficulty</h2>
+            <p style="color:#3a557f; margin-bottom: 0.5rem;">VS mode · mobile</p>
+            <div class="difficulty-buttons">
+                <button class="diff-select" data-diff="easy">🌱 Easy · 20 sec</button>
+                <button class="diff-select" data-diff="medium">🍂 Medium · 15 sec</button>
+                <button class="diff-select" data-diff="hard">🔥 Hard · 8 sec</button>
+                <button class="diff-select" data-diff="einstein">🧠 Einstein · 4 sec</button>
+            </div>
+            <div class="close-modal" id="closeModalLater">tap to close</div>
+        </div>
+    </div>
+
+    <!-- loss modal -->
+    <div id="lossModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>😲 <span id="opponentNameLoss">Opponent</span> won!</h2>
+            <p style="font-size:1.1rem; margin:0.5rem 0;">Try again or head back?</p>
+            <div class="modal-actions">
+                <button id="continueBtn">⏵ Continue</button>
+                <button id="menuBtn" class="menu-btn">🏠 Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- main mobile container -->
+    <div class="mobile-container">
+        <div class="mobile-header">
+            <h1>⚔️ Equa VS</h1>
+            <span class="opponent-badge"><i class="fas fa-robot"></i> <span id="opponentNameSpan">Algebot</span></span>
+        </div>
+
+        <!-- compact opponent card -->
+        <div class="opponent-card">
+            <div class="opponent-avatar-small">
+                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=opponent&backgroundColor=b6e3f4" alt="opponent">
+            </div>
+            <div class="opponent-info">
+                <div class="opponent-name" id="opponentNameDisplay">Algebot</div>
+                <div class="timer-row">
+                    <span class="timer-small" id="opponent-timer">--</span>
+                    <div class="progress-small"><div id="progress-mobile" style="width:0%;"></div></div>
+                    <span id="opponent-status-mobile">waiting</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- problem card -->
+        <div class="problem-card">
+            <div class="problem-label">📝 solve for x</div>
+            <div id="problem" class="problem">2x + 3 = 7</div>
+            <div class="answer-area">
+                <input type="text" id="answer" placeholder="your answer" autocomplete="off" inputmode="numeric">
+            </div>
+            <div class="action-btns">
+                <button class="btn btn-primary" id="submit">✓ submit</button>
+                <button class="btn btn-secondary" id="new-problem">↻ new</button>
+            </div>
+        </div>
+
+        <!-- streak row -->
+        <div class="streak-row">
+            <span>🔥 streak <span id="streak">0</span></span>
+            <span>⚡ <span id="current-diff">easy</span></span>
+        </div>
+
+        <!-- chat panel - Maya -->
+        <div class="chat-panel">
+            <div class="chat-header">
+                <div class="maya-avatar">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&hair=long&accessories=round&backgroundColor=b6e3f4,ffd5dc,ffdfbf" alt="Maya">
+                </div>
+                <h4>Maya <span style="font-size:0.8rem; font-weight:400;">coach</span></h4>
+            </div>
+            <div id="chat-messages" class="chat-messages">
+                <div>👋 Hi! I'm Maya. Select difficulty to start!</div>
+            </div>
+            <div class="chat-input-row">
+                <input type="text" id="chat-input" placeholder="ask Maya...">
+                <button class="icon-btn" id="chat-send"><i class="fas fa-paper-plane"></i></button>
+                <button class="icon-btn hint-btn" id="hint-button">💡 hint</button>
+            </div>
+        </div>
+
+        <footer>
+            repetition · mastery · ungraded
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            // Math pun names
+            const opponentNames = [
+                "Algebot", "Derivatus", "Calculon", "Pi-thon", "Fractionator",
+                "X-ponent", "Matrix", "Vector", "Sigmoid", "Gradient", "Limitron",
+                "Integral", "Polynome", "Slopebot", "Asymptote", "Functionator"
+            ];
+            const randomOpponentName = opponentNames[Math.floor(Math.random() * opponentNames.length)];
+            
+            // Update opponent name everywhere
+            document.getElementById('opponentNameSpan').textContent = randomOpponentName;
+            document.getElementById('opponentNameDisplay').textContent = randomOpponentName;
+            document.getElementById('opponentNameLoss').textContent = randomOpponentName;
+
+            // Config
+            const delayMap = { easy: 20000, medium: 15000, hard: 8000, einstein: 4000 };
+            let currentDifficulty = 'easy';
+            let currentDelay = delayMap.easy;
+            let streak = 0;
+            let problemActive = false; // Start as false until difficulty selected
+            let opponentTimer = null;
+            let opponentInterval = null;
+            let currentProblem = { text: '2x + 3 = 7', answer: 2 };
+            let hintCount = 0;
+            let gameStarted = false;
+            
+            // DOM elements
+            const problemEl = document.getElementById('problem');
+            const answerInput = document.getElementById('answer');
+            const submitBtn = document.getElementById('submit');
+            const newProblemBtn = document.getElementById('new-problem');
+            const streakSpan = document.getElementById('streak');
+            const currentDiffSpan = document.getElementById('current-diff');
+            const opponentTimerEl = document.getElementById('opponent-timer');
+            const opponentStatus = document.getElementById('opponent-status-mobile');
+            const progressBar = document.getElementById('progress-mobile');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const chatSend = document.getElementById('chat-send');
+            const hintButton = document.getElementById('hint-button');
+            const difficultyModal = document.getElementById('difficultyModal');
+            const lossModal = document.getElementById('lossModal');
+            const continueBtn = document.getElementById('continueBtn');
+            const menuBtn = document.getElementById('menuBtn');
+
+            // Show difficulty modal on page load
+            window.addEventListener('load', function() {
+                difficultyModal.style.display = 'flex';
+            });
+
+            // Helper functions
+            function generateRandomProblem() {
+                const a = Math.floor(Math.random() * 5) + 1;
+                const x = Math.floor(Math.random() * 11) - 5;
+                const b = Math.floor(Math.random() * 11) - 5;
+                const c = a * x + b;
+                return {
+                    text: `${a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)} = ${c}`,
+                    answer: x
+                };
+            }
+
+            function setProblem(prob) {
+                currentProblem = prob;
+                problemEl.innerText = prob.text;
+                answerInput.value = '';
+                problemActive = true;
+                hintCount = 0;
+            }
+
+            function updateStreak() {
+                streakSpan.innerText = streak;
+                currentDiffSpan.innerText = currentDifficulty;
+            }
+
+            // Opponent timer
+            function startOpponentTimer(delay) {
+                if (opponentTimer) clearTimeout(opponentTimer);
+                if (opponentInterval) clearInterval(opponentInterval);
+                const startTime = Date.now();
+
+                opponentTimerEl.innerText = (delay / 1000).toFixed(1) + 's';
+                opponentStatus.innerText = 'thinking...';
+                progressBar.style.width = '0%';
+
+                opponentInterval = setInterval(() => {
+                    if (!problemActive) return;
+                    const elapsed = Date.now() - startTime;
+                    const percent = Math.min(100, (elapsed / delay) * 100);
+                    progressBar.style.width = percent + '%';
+                    const remainingSec = Math.max(0, (delay - elapsed) / 1000).toFixed(1);
+                    opponentTimerEl.innerText = remainingSec + 's';
+
+                    if (elapsed >= delay) {
+                        clearInterval(opponentInterval);
+                        clearTimeout(opponentTimer);
+                        if (problemActive) {
+                            problemActive = false;
+                            opponentStatus.innerText = 'lost';
+                            lossModal.style.display = 'flex';
+                            streak = 0;
+                            updateStreak();
+                            addChatMessage('😢 So close! Let\'s try again!', false);
+                        }
+                    }
+                }, 80);
+
+                opponentTimer = setTimeout(() => {
+                    clearInterval(opponentInterval);
+                    if (problemActive) {
+                        problemActive = false;
+                        opponentStatus.innerText = 'lost';
+                        lossModal.style.display = 'flex';
+                        streak = 0;
+                        updateStreak();
+                        addChatMessage('😢 You\'ll get the next one!', false);
+                    }
+                }, delay);
+            }
+
+            function stopOpponentTimerWin() {
+                if (opponentTimer) clearTimeout(opponentTimer);
+                if (opponentInterval) clearInterval(opponentInterval);
+                opponentTimer = null;
+                opponentInterval = null;
+                opponentStatus.innerText = 'solved!';
+                opponentTimerEl.innerText = '🎉';
+                progressBar.style.width = '0%';
+            }
+
+            // Chat functions
+            function addChatMessage(text, isUser = false) {
+                const msgDiv = document.createElement('div');
+                msgDiv.innerText = text;
+                if (!isUser) msgDiv.classList.add('ai-message');
+                chatMessages.appendChild(msgDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function getHint() {
+                if (!gameStarted) {
+                    return "First, select a difficulty to start!";
+                }
+                hintCount++;
+                const problem = currentProblem.text;
+                if (hintCount === 1) {
+                    return "🔍 First, move the constant to the other side (subtract/add from both sides).";
+                } else if (hintCount === 2) {
+                    return "📐 Now divide both sides by the coefficient of x.";
+                } else {
+                    return "💡 The answer should be a whole number. Try working backwards from the options!";
+                }
+            }
+
+            // Handlers
+            function handleCorrect() {
+                if (!problemActive || !gameStarted) return;
+                problemActive = false;
+                streak++;
+                updateStreak();
+                stopOpponentTimerWin();
+                addChatMessage('✅ Correct! Well done!', false);
+                
+                setTimeout(() => {
+                    setProblem(generateRandomProblem());
+                    startOpponentTimer(currentDelay);
+                }, 1000);
+            }
+
+            function handleIncorrect() {
+                if (!gameStarted) {
+                    addChatMessage('Select a difficulty first!', false);
+                    return;
+                }
+                addChatMessage('❌ Not this time. Try again!', false);
+                answerInput.value = '';
+            }
+
+            // Start match
+            function startMatch(difficulty) {
+                currentDifficulty = difficulty;
+                currentDelay = delayMap[difficulty];
+                currentDiffSpan.innerText = difficulty;
+                streak = 0;
+                gameStarted = true;
+                problemActive = true;
+                updateStreak();
+                setProblem(generateRandomProblem());
+                startOpponentTimer(currentDelay);
+                addChatMessage(`👋 Let's go! You're facing ${randomOpponentName}. I'm here to help!`, false);
+                difficultyModal.style.display = 'none';
+            }
+
+            // Modal events - FIXED
+            document.querySelectorAll('.diff-select').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const diff = this.getAttribute('data-diff');
+                    startMatch(diff);
+                });
+            });
+            
+            document.getElementById('closeModalLater').addEventListener('click', function(e) {
+                e.stopPropagation();
+                startMatch('easy'); // Default to easy if they tap close
+            });
+            
+            // Close modal if clicking outside (but still start game)
+            difficultyModal.addEventListener('click', function(e) {
+                if (e.target === difficultyModal) {
+                    startMatch('easy');
+                }
+            });
+
+            // Loss modal events
+            continueBtn.addEventListener('click', function() {
+                lossModal.style.display = 'none';
+                setProblem(generateRandomProblem());
+                startOpponentTimer(currentDelay);
+            });
+            
+            menuBtn.addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
+
+            // Close loss modal if clicking outside
+            lossModal.addEventListener('click', function(e) {
+                if (e.target === lossModal) {
+                    lossModal.style.display = 'none';
+                    setProblem(generateRandomProblem());
+                    startOpponentTimer(currentDelay);
+                }
+            });
+
+            // Button events
+            submitBtn.addEventListener('click', function() {
+                if (!gameStarted) {
+                    difficultyModal.style.display = 'flex';
+                    return;
+                }
+                const ans = parseFloat(answerInput.value.trim());
+                if (isNaN(ans)) {
+                    addChatMessage('Please type a number', false);
+                    return;
+                }
+                if (ans === currentProblem.answer) handleCorrect();
+                else handleIncorrect();
+            });
+
+            newProblemBtn.addEventListener('click', function() {
+                if (!gameStarted) {
+                    difficultyModal.style.display = 'flex';
+                    return;
+                }
+                setProblem(generateRandomProblem());
+                startOpponentTimer(currentDelay);
+            });
+
+            chatSend.addEventListener('click', function() {
+                const text = chatInput.value.trim();
+                if (!text) return;
+                addChatMessage('🧑 ' + text, true);
+                chatInput.value = '';
+                setTimeout(() => {
+                    let reply = '';
+                    const lowerText = text.toLowerCase();
+                    if (lowerText.includes('hint') || lowerText.includes('help')) {
+                        reply = getHint();
+                    } else if (lowerText.includes('thank')) {
+                        reply = '😊 you\'re welcome!';
+                    } else if (lowerText.includes('hello') || lowerText.includes('hi')) {
+                        reply = '👋 Hello! Ready to solve some equations?';
+                    } else {
+                        reply = '🤖 Ask for a hint or keep going!';
+                    }
+                    addChatMessage(reply, false);
+                }, 300);
+            });
+
+            hintButton.addEventListener('click', function() {
+                addChatMessage('💡 ' + getHint(), false);
+            });
+
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') chatSend.click();
+            });
+
+            answerInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') submitBtn.click();
+            });
+
+            // Random motivation (only if game started)
+            setInterval(() => {
+                if (problemActive && gameStarted) {
+                    const msgs = [
+                        "Keep going! You've got this!",
+                        "Almost there!",
+                        "Maya believes in you!",
+                        "You're making progress!",
+                        "Stay focused!"
+                    ];
+                    addChatMessage('✨ ' + msgs[Math.floor(Math.random() * msgs.length)], false);
+                }
+            }, 25000);
+        })();
+    </script>
+</body>
+</html>
