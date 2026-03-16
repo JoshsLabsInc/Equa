@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equa · Mastery Roadmap</title>
+    <link rel="shortcut icon" type="image/x-icon" href="tablogo.png"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0B1020;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at 20% 30%, rgba(43, 75, 255, 0.1) 0%, transparent 30%),
+                        radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.1) 0%, transparent 30%);
+            z-index: -1;
+        }
+
+        .stars::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 10px 20px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 30px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 50px 60px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 80px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(4px 4px at 120px 80px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, #fff, rgba(0,0,0,0)),
+                radial-gradient(3px 3px at 200px 150px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 250px 250px;
+            opacity: 0.3;
+            animation: twinkle 4s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Main container */
+        .roadmap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* Header */
+        .roadmap-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: #2b4bff;
+            border-color: #2b4bff;
+            transform: translateX(-5px);
+        }
+
+        .header-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #a0b5ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.3rem;
+        }
+
+        .header-title p {
+            color: #8899cc;
+            font-size: 1rem;
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2b4bff;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #8899cc;
+        }
+
+        /* Progress bar */
+        .global-progress {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 60px;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 60px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2b4bff, #8a2be2);
+            border-radius: 60px;
+            width: 0%;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Roadmap grid */
+        .roadmap-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: relative;
+        }
+
+        /* Connecting lines */
+        .roadmap-grid::before {
+            content: '';
+            position: absolute;
+            left: 120px;
+            top: 40px;
+            bottom: 40px;
+            width: 3px;
+            background: linear-gradient(180deg, 
+                rgba(43, 75, 255, 0.2) 0%,
+                rgba(43, 75, 255, 0.5) 50%,
+                rgba(43, 75, 255, 0.2) 100%
+            );
+            box-shadow: 0 0 20px rgba(43, 75, 255, 0.3);
+            z-index: 0;
+        }
+
+        /* Road row */
+        .road-row {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        .road-row:nth-child(1) { animation-delay: 0.1s; }
+        .road-row:nth-child(2) { animation-delay: 0.2s; }
+        .road-row:nth-child(3) { animation-delay: 0.3s; }
+        .road-row:nth-child(4) { animation-delay: 0.4s; }
+        .road-row:nth-child(5) { animation-delay: 0.5s; }
+        .road-row:nth-child(6) { animation-delay: 0.6s; }
+        .road-row:nth-child(7) { animation-delay: 0.7s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Level indicator */
+        .level-indicator {
+            width: 80px;
+            height: 80px;
+            background: rgba(43, 75, 255, 0.1);
+            border: 2px solid rgba(43, 75, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #2b4bff;
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .level-indicator::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        .level-indicator.completed {
+            background: rgba(43, 255, 75, 0.1);
+            border-color: #2bff4b;
+            color: #2bff4b;
+        }
+
+        .level-indicator.current {
+            background: rgba(43, 75, 255, 0.2);
+            border-color: #2b4bff;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(43, 75, 255, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .level-indicator.locked {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(43, 75, 255, 0.5); }
+            50% { box-shadow: 0 0 50px rgba(43, 75, 255, 0.8); }
+        }
+
+        /* Topic cards */
+        .topic-cards {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .topic-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 1.5rem;
+            width: 220px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #2b4bff, #8a2be2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #2b4bff;
+        }
+
+        .topic-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .topic-card.completed {
+            background: rgba(43, 255, 75, 0.1);
+            border-color: rgba(43, 255, 75, 0.3);
+        }
+
+        .topic-card.completed::before {
+            background: #2bff4b;
+            transform: scaleX(1);
+        }
+
+        .topic-card.current {
+            background: rgba(43, 75, 255, 0.15);
+            border-color: #2b4bff;
+            box-shadow: 0 10px 30px rgba(43, 75, 255, 0.2);
+        }
+
+        .topic-card.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+        }
+
+        .topic-card.locked:hover {
+            transform: none;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .topic-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #2b4bff;
+        }
+
+        .topic-card.completed .topic-icon {
+            color: #2bff4b;
+        }
+
+        .topic-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .topic-description {
+            font-size: 0.9rem;
+            color: #8899cc;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .topic-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .topic-progress {
+            color: #2b4bff;
+            font-weight: 600;
+        }
+
+        .topic-card.completed .topic-progress {
+            color: #2bff4b;
+        }
+
+        .topic-xp {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.6rem;
+            border-radius: 40px;
+            color: #ffd700;
+        }
+
+        /* Checkmark for completed */
+        .checkmark {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: #2bff4b;
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .topic-card.completed .checkmark {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Lock icon */
+        .lock-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1.2rem;
+        }
+
+        /* Branch lines */
+        .branch-lines {
+            position: absolute;
+            left: 120px;
+            top: 40px;
+            bottom: 40px;
+            pointer-events: none;
+        }
+
+        .branch {
+            position: absolute;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(43, 75, 255, 0.5), transparent);
+        }
+
+        /* Achievement popup */
+        .achievement-popup {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transform: translateX(400px);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .achievement-popup.show {
+            transform: translateX(0);
+        }
+
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            background: #2b4bff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .achievement-text h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .achievement-text p {
+            font-size: 0.9rem;
+            color: #8899cc;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .topic-card {
+                width: 200px;
+                padding: 1.2rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .roadmap-grid::before {
+                left: 60px;
+            }
+            
+            .level-indicator {
+                width: 60px;
+                height: 60px;
+                font-size: 1.2rem;
+            }
+            
+            .branch-lines {
+                left: 60px;
+            }
+            
+            .topic-card {
+                width: 100%;
+            }
+            
+            .topic-cards {
+                flex-direction: column;
+            }
+            
+            .road-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .roadmap-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .user-stats {
+                width: 100%;
+                justify-content: space-around;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    
+    <div class="roadmap-container">
+        <!-- Header -->
+        <div class="roadmap-header">
+            <div class="header-left">
+                <button class="back-btn" onclick="window.location.href='index.html'">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-title">
+                    <h1>Mastery Roadmap</h1>
+                    <p>Your journey to mathematical excellence</p>
+                </div>
+            </div>
+            <div class="user-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalXP">2,450</div>
+                    <div class="stat-label">Total XP</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="topicsMastered">12</div>
+                    <div class="stat-label">Mastered</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="currentStreak">14</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Global Progress -->
+        <div class="global-progress">
+            <div class="progress-header">
+                <span>Overall Mastery</span>
+                <span id="progressPercentage">45%</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="globalProgressBar" style="width: 45%;"></div>
+            </div>
+        </div>
+
+        <!-- Roadmap Grid -->
+        <div class="roadmap-grid">
+            <!-- Branch lines container -->
+            <div class="branch-lines" id="branchLines"></div>
+
+            <!-- Row 1: Arithmetic -->
+            <div class="road-row">
+                <div class="level-indicator completed" id="level1">
+                    <span>1</span>
+                </div>
+                <div class="topic-cards">
+                    <div class="topic-card completed" data-topic="basic-ops" data-xp="100">
+                        <i class="fas fa-check-circle checkmark"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <div class="topic-title">Basic Operations</div>
+                        <div class="topic-description">Addition, subtraction, multiplication, division</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">100%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 100 XP</span>
+                        </div>
+                    </div>
+                    <div class="topic-card completed" data-topic="fractions" data-xp="150">
+                        <i class="fas fa-check-circle checkmark"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-divide"></i>
+                        </div>
+                        <div class="topic-title">Fractions & Decimals</div>
+                        <div class="topic-description">Fractions, decimals, percentages</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">100%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 150 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2: Pre-Algebra -->
+            <div class="road-row">
+                <div class="level-indicator completed" id="level2">
+                    <span>2</span>
+                </div>
+                <div class="topic-cards">
+                    <div class="topic-card completed" data-topic="order-of-ops" data-xp="200">
+                        <i class="fas fa-check-circle checkmark"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div class="topic-title">Order of Operations</div>
+                        <div class="topic-description">PEMDAS, expressions, simplifying</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">100%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 200 XP</span>
+                        </div>
+                    </div>
+                    <div class="topic-card completed" data-topic="integers" data-xp="180">
+                        <i class="fas fa-check-circle checkmark"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-plus-minus"></i>
+                        </div>
+                        <div class="topic-title">Integers & Absolute Value</div>
+                        <div class="topic-description">Negative numbers, absolute value</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">100%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 180 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 3: Algebra Fundamentals -->
+            <div class="road-row">
+                <div class="level-indicator current" id="level3">
+                    <span>3</span>
+                </div>
+                <div class="topic-cards">
+                    <div class="topic-card current" data-topic="linear-equations" data-xp="250">
+                        <div class="topic-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="topic-title">Linear Equations</div>
+                        <div class="topic-description">Solving for x, slope, intercepts</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">75%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 250 XP</span>
+                        </div>
+                    </div>
+                    <div class="topic-card" data-topic="inequalities" data-xp="225" data-locked="true">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-not-equal"></i>
+                        </div>
+                        <div class="topic-title">Inequalities</div>
+                        <div class="topic-description">Greater than, less than, compound</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">0%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 225 XP</span>
+                        </div>
+                    </div>
+                    <div class="topic-card" data-topic="systems" data-xp="275" data-locked="true">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div class="topic-title">Systems of Equations</div>
+                        <div class="topic-description">Substitution, elimination, graphing</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">0%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 275 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 4: Advanced Algebra -->
+            <div class="road-row">
+                <div class="level-indicator" id="level4">
+                    <span>4</span>
+                </div>
+                <div class="topic-cards">
+                    <div class="topic-card" data-topic="quadratics" data-xp="300" data-locked="true">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-chart-area"></i>
+                        </div>
+                        <div class="topic-title">Quadratics</div>
+                        <div class="topic-description">Factoring, quadratic formula, parabolas</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">0%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 300 XP</span>
+                        </div>
+                    </div>
+                    <div class="topic-card" data-topic="polynomials" data-xp="280" data-locked="true">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-superscript"></i>
+                        </div>
+                        <div class="topic-title">Polynomials</div>
+                        <div class="topic-description">Degree, operations, factoring</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">0%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 280 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 5: Pre-Calculus -->
+            <div class="road-row">
+                <div class="level-indicator" id="level5">
+                    <span>5</span>
+                </div>
+                <div class="topic-cards">
+                    <div class="topic-card" data-topic="functions" data-xp="320" data-locked="true">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div class="topic-title">Functions</div>
+                        <div class="topic-description">Domain, range, composition, inverse</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">0%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 320 XP</span>
+                        </div>
+                    </div>
+                    <div class="topic-card" data-topic="trigonometry" data-xp="350" data-locked="true">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-wave-square"></i>
+                        </div>
+                        <div class="topic-title">Trigonometry</div>
+                        <div class="topic-description">Sin, cos, tan, identities, unit circle</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">0%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 350 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 6: Calculus -->
+            <div class="road-row">
+                <div class="level-indicator" id="level6">
+                    <span>6</span>
+                </div>
+                <div class="topic-cards">
+                    <div class="topic-card" data-topic="limits" data-xp="400" data-locked="true">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div class="topic-title">Limits</div>
+                        <div class="topic-description">Approaching, continuity, infinity</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">0%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 400 XP</span>
+                        </div>
+                    </div>
+                    <div class="topic-card" data-topic="derivatives" data-xp="450" data-locked="true">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="topic-title">Derivatives</div>
+                        <div class="topic-description">Rate of change, power rule, chain rule</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">0%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 450 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 7: Advanced Calculus -->
+            <div class="road-row">
+                <div class="level-indicator" id="level7">
+                    <span>7</span>
+                </div>
+                <div class="topic-cards">
+                    <div class="topic-card" data-topic="integrals" data-xp="500" data-locked="true">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <div class="topic-title">Integrals</div>
+                        <div class="topic-description">Area, accumulation, FTC</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">0%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 500 XP</span>
+                        </div>
+                    </div>
+                    <div class="topic-card" data-topic="differential-equations" data-xp="550" data-locked="true">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div class="topic-icon">
+                            <i class="fas fa-infinity"></i>
+                        </div>
+                        <div class="topic-title">Diff. Equations</div>
+                        <div class="topic-description">Rate equations, modeling</div>
+                        <div class="topic-meta">
+                            <span class="topic-progress">0%</span>
+                            <span class="topic-xp"><i class="fas fa-star"></i> 550 XP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievementPopup">
+        <div class="achievement-icon">
+            <i class="fas fa-trophy"></i>
+        </div>
+        <div class="achievement-text">
+            <h4>Achievement Unlocked!</h4>
+            <p id="achievementMessage">Mastered Linear Equations</p>
+        </div>
+    </div>
+
+    <script>
+        // User progress data (would come from localStorage in real implementation)
+        const userProgress = {
+            totalXP: 2450,
+            topicsMastered: 12,
+            currentStreak: 14,
+            overallMastery: 45,
+            completedTopics: ['basic-ops', 'fractions', 'order-of-ops', 'integers', 'linear-equations'],
+            currentTopic: 'linear-equations',
+            topicProgress: {
+                'linear-equations': 75,
+                'inequalities': 0,
+                'systems': 0,
+                'quadratics': 0,
+                'polynomials': 0,
+                'functions': 0,
+                'trigonometry': 0,
+                'limits': 0,
+                'derivatives': 0,
+                'integrals': 0,
+                'differential-equations': 0
+            }
+        };
+
+        // Update stats
+        document.getElementById('totalXP').textContent = userProgress.totalXP;
+        document.getElementById('topicsMastered').textContent = userProgress.topicsMastered;
+        document.getElementById('currentStreak').textContent = userProgress.currentStreak;
+        document.getElementById('progressPercentage').textContent = userProgress.overallMastery + '%';
+        document.getElementById('globalProgressBar').style.width = userProgress.overallMastery + '%';
+
+        // Add branch lines
+        function addBranchLines() {
+            const branchLines = document.getElementById('branchLines');
+            const rows = document.querySelectorAll('.road-row');
+            
+            rows.forEach((row, index) => {
+                if (index < rows.length - 1) {
+                    const branch = document.createElement('div');
+                    branch.className = 'branch';
+                    branch.style.top = (index * 100 + 60) + 'px';
+                    branch.style.left = '60px';
+                    branch.style.transform = 'rotate(45deg)';
+                    branch.style.width = '60px';
+                    branchLines.appendChild(branch);
+                }
+            });
+        }
+        addBranchLines();
+
+        // Topic card click handler
+        document.querySelectorAll('.topic-card:not(.locked)').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (this.classList.contains('locked')) return;
+                
+                const topic = this.dataset.topic;
+                const title = this.querySelector('.topic-title').textContent;
+                
+                // Show achievement popup for demonstration
+                if (this.classList.contains('current')) {
+                    showAchievement('Continuing your journey in ' + title);
+                } else if (!this.classList.contains('completed')) {
+                    showAchievement('Starting ' + title + '!');
+                }
+                
+                // In real implementation, navigate to practice mode
+                console.log('Navigate to:', topic);
+            });
+        });
+
+        // Show achievement popup
+        function showAchievement(message) {
+            const popup = document.getElementById('achievementPopup');
+            const msgEl = document.getElementById('achievementMessage');
+            msgEl.textContent = message;
+            popup.classList.add('show');
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 3000);
+        }
+
+        // Simulate progress animation
+        function animateProgress() {
+            const progressBars = document.querySelectorAll('.topic-progress');
+            progressBars.forEach(bar => {
+                const value = bar.textContent.replace('%', '');
+                if (parseInt(value) > 0) {
+                    bar.style.opacity = '0';
+                    setTimeout(() => {
+                        bar.style.opacity = '1';
+                    }, 500);
+                }
+            });
+        }
+        animateProgress();
+
+        // Add floating animation to current level
+        const currentLevel = document.querySelector('.level-indicator.current');
+        if (currentLevel) {
+            setInterval(() => {
+                currentLevel.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    currentLevel.style.transform = 'scale(1)';
+                }, 500);
+            }, 3000);
+        }
+
+        // Simulate XP gain on hover
+        document.querySelectorAll('.topic-card:not(.locked)').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const xp = this.querySelector('.topic-xp i');
+                if (xp) {
+                    xp.style.animation = 'spin 1s ease';
+                    setTimeout(() => {
+                        xp.style.animation = '';
+                    }, 1000);
+                }
+            });
+        });
+
+        // Add sparkle effect to completed topics
+        document.querySelectorAll('.topic-card.completed').forEach(card => {
+            setInterval(() => {
+                const checkmark = card.querySelector('.checkmark');
+                checkmark.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    checkmark.style.transform = 'scale(1)';
+                }, 300);
+            }, 2000);
+        });
+
+        // Back button functionality
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Handle locked topics
+        document.querySelectorAll('.topic-card.locked').forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.preventDefault();
+                showAchievement('Complete previous topics to unlock!');
+                
+                // Shake animation
+                this.style.animation = 'shake 0.5s ease';
+                setTimeout(() => {
+                    this.style.animation = '';
+                }, 500);
+            });
+        });
+
+        // Add keyframe for shake
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                50% { transform: translateX(5px); }
+                75% { transform: translateX(-5px); }
+            }
+            
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Simulate loading from localStorage
+        window.addEventListener('load', function() {
+            // In real implementation, load user progress from localStorage
+            console.log('Roadmap loaded with user progress');
+        });
+    </script>
+</body>
+</html>
