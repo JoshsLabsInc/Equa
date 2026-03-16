@@ -455,7 +455,7 @@
             background: #1f3ed0;
         }
 
-        /* Modal */
+        /* Setup Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -467,6 +467,185 @@
             z-index: 3000;
             padding: 1rem;
         }
+        
+        /* Updated setup modal CSS for mobile */
+        .setup-modal {
+            max-width: 400px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            text-align: center;
+            padding: 1.5rem 1.2rem !important;
+            background: white;
+            border-radius: 36px;
+            scrollbar-width: thin;
+            scrollbar-color: #2b4bff #eef2f7;
+        }
+
+        .setup-modal::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .setup-modal::-webkit-scrollbar-track {
+            background: #eef2f7;
+            border-radius: 10px;
+        }
+
+        .setup-modal::-webkit-scrollbar-thumb {
+            background: #2b4bff;
+            border-radius: 10px;
+        }
+
+        .setup-modal h2 {
+            font-size: 1.6rem !important;
+            margin-bottom: 0.25rem !important;
+        }
+
+        .setup-modal p {
+            margin-bottom: 1rem !important;
+            font-size: 0.9rem;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .avatar-option {
+            cursor: pointer;
+            border-radius: 16px;
+            padding: 0.6rem;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.02);
+            background: #f0f4fe;
+        }
+
+        .avatar-option.selected {
+            border-color: #2b4bff;
+            background: #e0eaff;
+        }
+
+        .avatar-option img {
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            margin-bottom: 0.2rem;
+        }
+
+        .avatar-name {
+            font-weight: 600;
+            color: #1b2b4b;
+            font-size: 0.8rem;
+        }
+
+        .setup-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #eef2f7;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            margin: 0.5rem 0;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .setup-input:focus {
+            border-color: #2b4bff;
+        }
+
+        .setup-button {
+            background: #2b4bff;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .setup-button:hover {
+            background: #1f3ed0;
+            transform: translateY(-2px);
+        }
+
+        .setup-button:disabled {
+            background: #a0b0cc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 0.3rem;
+            padding: 0.5rem;
+            justify-content: center;
+        }
+        
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #2b4bff;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        .goal-badge {
+            background: #e2ecfe;
+            color: #1f449b;
+            border-radius: 20px;
+            padding: 0.3rem 1rem;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Reboot notification */
+        .reboot-notification {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 4000;
+            animation: slideInRight 0.3s ease;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Wrapped Modal */
         .modal-content {
             background: white;
             border-radius: 36px;
@@ -493,9 +672,83 @@
             padding: 1.8rem 1.2rem;
             background: linear-gradient(145deg, #f9e5b7, #ffe0a8);
         }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 380px) {
+            .avatar-grid {
+                gap: 0.3rem;
+            }
+            
+            .avatar-option img {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .avatar-name {
+                font-size: 0.7rem;
+            }
+            
+            .setup-modal h2 {
+                font-size: 1.4rem !important;
+            }
+            
+            .setup-input {
+                padding: 0.7rem;
+                font-size: 0.9rem;
+            }
+            
+            .setup-button {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.95rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Setup Modal -->
+    <div class="modal-overlay" id="setupModal" style="display: flex;">
+        <div class="modal-content setup-modal">
+            <h2>👋 Welcome to Equa!</h2>
+            <p style="color: #4d6587;">Let's get to know each other</p>
+            
+            <input type="text" class="setup-input" id="userName" placeholder="What's your name? (e.g., Alex)" autocomplete="off">
+            
+            <div style="margin: 1.5rem 0;">
+                <p style="font-weight: 600; margin-bottom: 1rem;">Choose your AI coach</p>
+                                <div class="avatar-grid" id="avatarGrid">
+                    <div class="avatar-option" data-avatar="maya" data-name="Maya" data-gender="female">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&hair=long&accessories=round&backgroundColor=b6e3f4" alt="Maya">
+                        <div class="avatar-name">Maya</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="sabrina" data-name="Sabrina" data-gender="female">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sabrina&mouth=smile&eyes=happy&hair=short&accessories=round&backgroundColor=ffd5dc" alt="Sabrina">
+                        <div class="avatar-name">Sabrina</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="Joshua" data-name="Joshua" data-gender="male">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Joshua&mouth=smile&eyes=happy&hair=fonze&accessories=round&backgroundColor=ffdfbf" alt="Joshua">
+                        <div class="avatar-name">Joshua</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="sam" data-name="Sam" data-gender="neutral">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sam&mouth=smile&eyes=happy&hair=pixie&accessories=round&backgroundColor=c0aede" alt="Sam">
+                        <div class="avatar-name">Sam</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="jovy" data-name="Jovy" data-gender="neutral">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jovy&mouth=smile&eyes=happy&hair=curly&accessories=round&backgroundColor=d1d4f0" alt="Jovy">
+                        <div class="avatar-name">Jovy</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="ray" data-name="Ray" data-gender="neutral">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ray&mouth=smile&eyes=happy&hair=bob&accessories=round&backgroundColor=b6e3f4" alt="Ray">
+                        <div class="avatar-name">Ray</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="setup-button" id="startJourneyBtn" disabled>Start My Math Journey</button>
+            <p style="color: #8699bb; font-size: 0.75rem; margin-top: 1rem;">Your preferences will be saved locally</p>
+            <p style="color: #8699bb; font-size: 0.7rem; margin-top: 0.3rem;">💡 Type "reboot()" in console to reset</p>
+        </div>
+    </div>
+
     <!-- Wrapped Modal -->
     <div class="modal-overlay" id="wrappedModal">
         <div class="modal-content">
@@ -513,7 +766,7 @@
 
     <!-- Quick Action Button with Notification -->
     <div class="quick-action-wrapper">
-        <div class="quick-action-btn" id="quickChatBtn" title="Chat with Maya">
+        <div class="quick-action-btn" id="quickChatBtn" title="Chat with your coach">
             <i class="fas fa-comment"></i>
             <span class="notification-badge" id="notificationBadge">1</span>
         </div>
@@ -527,15 +780,15 @@
                 <h1>Equa</h1>
                 <span class="badge-mobile"><i class="fas fa-robot"></i> AI coach</span>
             </div>
-            <div class="profile-mini">
+            <div class="profile-mini" id="profileButton">
                 <span>843</span>
-                <div class="avatar-micro">JS</div>
+                <div class="avatar-micro" id="userAvatar">JS</div>
             </div>
         </div>
 
-        <div class="welcome-card">
+        <div class="welcome-card" id="dynamicWelcome">
             <i class="fas fa-hand-wave" style="color:#2b4bff;"></i>
-            <span>Josh, Maya prepared new challenges based on your last session.</span>
+            <span>Loading your personalized experience...</span>
         </div>
 
         <div class="modes-header">
@@ -544,7 +797,7 @@
         </div>
 
         <div class="mode-list">
-            <div class="mode-card-mobile">
+            <div class="mode-card-mobile" id="vsModeCard">
                 <div class="mode-icon-mobile"><i class="fas fa-user-robot"></i></div>
                 <div><div class="mode-title-mobile">VS mode</div><div class="mode-desc-mobile">race against AI</div></div>
             </div>
@@ -587,9 +840,9 @@
     <div class="chat-panel" id="chatPanel">
         <div class="panel-header">
             <div class="panel-header-left">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&backgroundColor=b6e3f4" alt="Maya">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&backgroundColor=b6e3f4" alt="Coach" id="chatAvatar">
                 <div>
-                    <h3 style="font-size: 1.2rem;">Maya</h3>
+                    <h3 style="font-size: 1.2rem;" id="chatCoachName">Maya</h3>
                     <span style="color: #4b6a96; font-size: 0.8rem;">AI Math Coach · Online</span>
                 </div>
             </div>
@@ -601,97 +854,177 @@
             <!-- Messages will be added here -->
         </div>
         <div class="panel-input">
-            <input type="text" placeholder="Ask Maya..." id="messageInput">
+            <input type="text" placeholder="Ask me anything..." id="messageInput">
             <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
         </div>
     </div>
 
     <script>
-        // Modal functionality
-        const modal = document.getElementById('wrappedModal');
-        const statsBtn = document.getElementById('statsButton');
-        const closeModal = document.getElementById('closeModal');
-        
-        statsBtn.addEventListener('click', () => modal.style.display = 'flex');
-        closeModal.addEventListener('click', () => modal.style.display = 'none');
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) modal.style.display = 'none';
-        });
+        // User configuration
+        let userConfig = null;
+        let conversationHistory = [];
+        let lastResponseIndex = {};
 
-        // Chat elements
-        const chatPanel = document.getElementById('chatPanel');
-        const closePanelBtn = document.getElementById('closePanelBtn');
-        const panelMessages = document.getElementById('panelMessages');
-        const messageInput = document.getElementById('messageInput');
-        const sendButton = document.getElementById('sendMessage');
-        const quickChatBtn = document.getElementById('quickChatBtn');
-        const notificationBadge = document.getElementById('notificationBadge');
-
-        // State
-        let hasUnreadMessage = true;
-
-        // Function to open chat panel
-        function openChatPanel() {
-            chatPanel.classList.add('show');
-            // Hide notification badge when opening chat
-            notificationBadge.style.display = 'none';
-            hasUnreadMessage = false;
-            // Focus input after animation
-            setTimeout(() => messageInput.focus(), 300);
-        }
-
-        // Function to close chat panel
-        function closeChatPanel() {
-            chatPanel.classList.remove('show');
-        }
-
-        // Add initial message from Maya on page load
-        function addInitialMessage() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        // ==================== REBOOT FUNCTIONALITY ====================
+        window.reboot = function() {
+            // Clear all storage
+            localStorage.clear();
             
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message bot';
-            messageDiv.innerHTML = `
-                <div class="message-content">👋 Hi Josh! I'm Maya, your AI math coach. I remember you were working on derivatives last time. I've prepared some personalized practice problems for you! Ready to continue?</div>
-                <div class="message-time">${timeString}</div>
-            `;
-            panelMessages.appendChild(messageDiv);
+            // Clear cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+            });
+            
+            // Reset userConfig
+            userConfig = null;
+            
+            // Show setup modal
+            document.getElementById('setupModal').style.display = 'flex';
+            
+            // Reset avatar selection
+            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('startJourneyBtn').disabled = true;
+            document.getElementById('userName').value = '';
+            
+            // Reset chat
+            document.getElementById('panelMessages').innerHTML = '';
+            
+            // Reset welcome message
+            document.getElementById('dynamicWelcome').innerHTML = '<i class="fas fa-hand-wave" style="color:#2b4bff;"></i> <span>Loading your personalized experience...</span>';
+            
+            // Show notification
+            showRebootNotification();
+            
+            console.log('✅ Equa reset! You can now choose a new coach.');
+        };
+
+        // Show reboot notification
+        function showRebootNotification() {
+            const notification = document.createElement('div');
+            notification.className = 'reboot-notification';
+            notification.innerHTML = '<i class="fas fa-check-circle" style="color: #4caf50;"></i> Reset complete! Choose your coach.';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
         }
 
-        // Add welcome message on page load
-        window.addEventListener('load', () => {
-            addInitialMessage();
-            // Show notification badge (already visible by default)
-        });
-
-        // Quick chat button click - opens chat
-        quickChatBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            openChatPanel();
-        });
-
-        // Close panel with X button
-        closePanelBtn.addEventListener('click', function() {
-            closeChatPanel();
-        });
-
-        // Close panel with back button (Android)
-        window.addEventListener('popstate', function() {
-            if (chatPanel.classList.contains('show')) {
-                closeChatPanel();
+        // Check for existing user config on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedConfig = localStorage.getItem('equa_user_config');
+            
+            if (savedConfig) {
+                userConfig = JSON.parse(savedConfig);
+                document.getElementById('setupModal').style.display = 'none';
+                updateUIWithConfig();
+                displayWelcomeMessage();
+            } else {
+                document.getElementById('setupModal').style.display = 'flex';
             }
+            
+            console.log('%c🔧 Type "reboot()" in console to reset and choose a new coach', 'color: #f5b342;');
         });
 
-        // Messaging functionality
-        function addMessage(text, isUser) {
-            if (!text.trim()) return;
+        // Avatar selection
+        const avatarOptions = document.querySelectorAll('.avatar-option');
+        let selectedAvatar = null;
+
+        avatarOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                avatarOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedAvatar = {
+                    avatar: this.dataset.avatar,
+                    name: this.dataset.name,
+                    gender: this.dataset.gender,
+                    imageUrl: this.querySelector('img').src
+                };
+                document.getElementById('startJourneyBtn').disabled = false;
+            });
+        });
+
+        // Start journey button
+        document.getElementById('startJourneyBtn').addEventListener('click', function() {
+            const userName = document.getElementById('userName').value.trim();
             
+            if (!userName) {
+                alert('Please enter your name');
+                return;
+            }
+            
+            if (!selectedAvatar) {
+                alert('Please select an avatar');
+                return;
+            }
+
+            userConfig = {
+                userName: userName,
+                coach: selectedAvatar,
+                createdAt: new Date().toISOString(),
+                userId: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+            };
+
+            // Save to localStorage
+            localStorage.setItem('equa_user_config', JSON.stringify(userConfig));
+
+            document.getElementById('setupModal').style.display = 'none';
+            updateUIWithConfig();
+            displayWelcomeMessage();
+        });
+
+        // Update UI with user configuration
+        function updateUIWithConfig() {
+            if (!userConfig) return;
+
+            // Update welcome message with user's name
+            const welcomeDiv = document.getElementById('dynamicWelcome');
+            const hour = new Date().getHours();
+            let timeGreeting;
+            
+            if (hour < 12) timeGreeting = 'morning';
+            else if (hour < 17) timeGreeting = 'afternoon';
+            else timeGreeting = 'evening';
+            
+            welcomeDiv.innerHTML = `<i class="fas fa-hand-wave" style="color:#2b4bff;"></i> <span>Good ${timeGreeting}, ${userConfig.userName}! Your coach ${userConfig.coach.name} is ready to help you excel at math.</span>`;
+
+            // Update coach avatar and name in chat
+            document.getElementById('chatAvatar').src = userConfig.coach.imageUrl;
+            document.getElementById('chatCoachName').textContent = userConfig.coach.name;
+
+            // Update user avatar
+            const userAvatar = document.getElementById('userAvatar');
+            userAvatar.textContent = userConfig.userName.charAt(0).toUpperCase();
+            
+            // Update profile name in mini profile
+            const profileSpan = document.querySelector('.profile-mini span');
+            if (profileSpan) {
+                profileSpan.textContent = userConfig.userName.charAt(0).toUpperCase();
+            }
+        }
+
+        // Display welcome message
+        function displayWelcomeMessage() {
+            const panelMessages = document.getElementById('panelMessages');
+            panelMessages.innerHTML = '';
+            
+            const welcomeMsgs = [
+                `Hi ${userConfig.userName}! I'm ${userConfig.coach.name}, your personal math coach. I'm here to make math fun and understandable. What would you like to explore today? 🌟`,
+                `Hey ${userConfig.userName}! Great to see you. I'm ${userConfig.coach.name} and I'll help you become a math wizard. Ready to start? 🧙‍♂️`,
+                `Welcome ${userConfig.userName}! I'm ${userConfig.coach.name}. Whether it's algebra, calculus, or anything in between, we'll tackle it together. What's on your mind? 📚`
+            ];
+            
+            addMessageToChat('bot', welcomeMsgs[Math.floor(Math.random() * welcomeMsgs.length)]);
+        }
+
+        // Add message to chat
+        function addMessageToChat(sender, text) {
+            const panelMessages = document.getElementById('panelMessages');
             const now = new Date();
             const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
             const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            messageDiv.className = `message ${sender}`;
             
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
@@ -707,21 +1040,231 @@
             panelMessages.scrollTop = panelMessages.scrollHeight;
         }
 
-        // Send message on button click
+        // Show typing indicator
+        function showTypingIndicator() {
+            const panelMessages = document.getElementById('panelMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+                <div class="message-time">now</div>
+            `;
+            panelMessages.appendChild(typingDiv);
+            panelMessages.scrollTop = panelMessages.scrollHeight;
+        }
+
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+
+        // Get random response without repeating
+        function getUniqueResponse(category, responses) {
+            if (!lastResponseIndex[category]) {
+                lastResponseIndex[category] = -1;
+            }
+            
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * responses.length);
+            } while (newIndex === lastResponseIndex[category] && responses.length > 1);
+            
+            lastResponseIndex[category] = newIndex;
+            return responses[newIndex];
+        }
+
+        // Generate smart response
+        function generateSmartResponse(userMessage) {
+            const lowerMsg = userMessage.toLowerCase();
+            const userName = userConfig.userName;
+            const coachName = userConfig.coach.name;
+            
+            // Greetings
+            if (lowerMsg.match(/^(hi|hello|hey|howdy|sup|greetings)/)) {
+                const greetings = [
+                    `Hey ${userName}! Ready to crush some math problems today? 🚀`,
+                    `Hello ${userName}! I was just thinking about what we should learn today. Any preferences? 😊`,
+                    `Hi ${userName}! Your favorite math coach is here to help. What shall we tackle? 💪`,
+                    `Hey there ${userName}! I'm excited to see you. Let's make some math magic happen! ✨`
+                ];
+                return greetings[Math.floor(Math.random() * greetings.length)];
+            }
+            
+            // How are you
+            if (lowerMsg.includes('how are you')) {
+                const feelings = [
+                    `I'm doing great, ${userName}! Especially now that you're here to learn. How are you feeling today? 😊`,
+                    `I'm fantastic! I love helping students discover the beauty of math. How's your day going? 🌟`,
+                    `I'm excellent! A bit excited actually - I have some cool math concepts to share with you. Ready? 🎉`
+                ];
+                return feelings[Math.floor(Math.random() * feelings.length)];
+            }
+            
+            // Practice requests
+            if (lowerMsg.includes('practice') || lowerMsg.includes('problem') || lowerMsg.includes('exercise')) {
+                const problems = [
+                    `Let's warm up with derivatives! Find f'(x) if f(x) = 4x³ - 2x² + 7`,
+                    `Try this integral: ∫ (3x² + 2x + 1) dx`,
+                    `Here's a limit problem: lim(x→3) (x² - 9)/(x - 3)`,
+                    `Solve for x: 2x² + 5x - 12 = 0`,
+                    `Find the derivative: d/dx [sin(x) + cos(x)]`,
+                    `Evaluate: ∫ (6x⁵ - 4x³) dx`
+                ];
+                return problems[Math.floor(Math.random() * problems.length)];
+            }
+            
+            // Help with derivatives
+            if (lowerMsg.includes('derivative')) {
+                const derivExplanations = [
+                    `Derivatives measure the rate of change - like finding the speed of a car at an exact moment. For xⁿ, the derivative is n·xⁿ⁻¹. So derivative of x³ is 3x²! Want to try one? 📈`,
+                    `Think of derivatives as the "slope finder" for any point on a curve. The power rule is your best friend: d/dx[xⁿ] = n·xⁿ⁻¹. For example, derivative of x⁴ is 4x³. Make sense? 🤔`,
+                    `Derivatives are all about change! The derivative of x² is 2x because we multiply by the power (2) and reduce it by 1. It's like magic but it's math! ✨`
+                ];
+                return derivExplanations[Math.floor(Math.random() * derivExplanations.length)];
+            }
+            
+            // Help with integrals
+            if (lowerMsg.includes('integral')) {
+                const intExplanations = [
+                    `Integration is the reverse of differentiation! ∫ xⁿ dx = (xⁿ⁺¹)/(n+1) + C. For example, ∫ x² dx = x³/3 + C. The +C is super important! 📊`,
+                    `Think of integrals as area collectors under curves. ∫ 2x dx = x² + C because if we differentiate x², we get 2x. It's working backwards! 🔄`,
+                    `Integrals add up tiny pieces to find the whole. ∫ x dx = x²/2 + C. Practice makes perfect with these! 🎯`
+                ];
+                return intExplanations[Math.floor(Math.random() * intExplanations.length)];
+            }
+            
+            // Help with limits
+            if (lowerMsg.includes('limit')) {
+                const limitExplanations = [
+                    `Limits tell us what happens as we get REALLY close to something. For continuous functions, just plug in the number! But watch out for 0/0 situations - those need special tricks. 🎯`,
+                    `Limits are the foundation of calculus! They describe behavior approaching a point. For rational functions, factoring often helps. Want an example? 📐`,
+                    `Think of limits as "approaching but not touching" - like getting infinitely close to a number. For (x²-4)/(x-2) as x→2, factor to (x-2)(x+2)/(x-2) = x+2, so limit is 4! ✨`
+                ];
+                return limitExplanations[Math.floor(Math.random() * limitExplanations.length)];
+            }
+            
+            // Encouragement when struggling
+            if (lowerMsg.includes('hard') || lowerMsg.includes('difficult') || lowerMsg.includes('stuck') || lowerMsg.includes('confused')) {
+                const encouragement = [
+                    `Hey ${userName}, it's completely normal to find this tricky! Every mathematician has been where you are. Let's break it down together. What specific part is confusing? 💪`,
+                    `You know what? The fact that you're pushing through confusion is exactly how we grow. Take a deep breath and let's tackle this step by step. You've got this! 🌟`,
+                    `I totally get it - math can be challenging. But remember, you've already solved problems with me! Let's work through this one together. 🤝`
+                ];
+                return encouragement[Math.floor(Math.random() * encouragement.length)];
+            }
+            
+            // Progress questions
+            if (lowerMsg.includes('progress') || lowerMsg.includes('improving') || lowerMsg.includes('getting better')) {
+                const progress = [
+                    `You're making wonderful progress, ${userName}! I can see your problem-solving skills sharpening. Keep up this momentum! 📈`,
+                    `You know what I love? Your persistence. That's the #1 predictor of success in math. You're doing amazing! 🚀`,
+                    `Based on our sessions, you're getting faster at recognizing patterns. That's a huge sign of improvement! 🎯`
+                ];
+                return progress[Math.floor(Math.random() * progress.length)];
+            }
+            
+            // Goals
+            if (lowerMsg.includes('goal') || lowerMsg.includes('target')) {
+                const goals = [
+                    `Let's set some SMART goals! How about mastering the power rule this week with 5 practice problems daily? Then we can move to chain rule. Sound good? 🎯`,
+                    `I love your ambition! Let's aim for 80% accuracy on derivatives by Friday. I'll give you progressively challenging problems. Deal? 🤝`,
+                    `Great idea to set goals! How about: 1) Complete 10 problems daily 2) Master one new concept weekly 3) Increase speed by 20%. What do you think? 📋`
+                ];
+                return goals[Math.floor(Math.random() * goals.length)];
+            }
+            
+            // Thanks
+            if (lowerMsg.includes('thank')) {
+                const thanks = [
+                    `You're so welcome, ${userName}! That's what I'm here for. Anything else you'd like to explore? 😊`,
+                    `My pleasure! Seeing you learn makes my day. What's next on our math adventure? 🚀`,
+                    `Anytime, ${userName}! I'm always here when you need a math buddy. Ready for another challenge? 💪`
+                ];
+                return thanks[Math.floor(Math.random() * thanks.length)];
+            }
+            
+            // Default responses (varied)
+            const defaultResponses = [
+                `That's interesting, ${userName}! While I think about that, would you like to practice some derivatives or integrals?`,
+                `Hmm, tell me more! In the meantime, we could work on some algebra problems if you'd like.`,
+                `I'm here to help with math, ${userName}! Want to try a practice problem or learn a new concept?`,
+                `Great question! While I process that, remember that math is all about practice. Want to do a quick problem?`,
+                `You know ${userName}, every math question is a good question. Would you like to explore derivatives today?`
+            ];
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        // Send message to AI
+        async function sendMessageToAI(userMessage) {
+            if (!userConfig) {
+                alert('Please set up your profile first');
+                return;
+            }
+
+            // Add user message to chat
+            addMessageToChat('user', userMessage);
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Simulate thinking time
+            setTimeout(() => {
+                // Hide typing indicator
+                hideTypingIndicator();
+
+                // Generate smart response
+                const response = generateSmartResponse(userMessage);
+                
+                // Add AI response to chat
+                addMessageToChat('bot', response);
+            }, 1000 + Math.random() * 500);
+        }
+
+        // Chat functionality
+        const chatPanel = document.getElementById('chatPanel');
+        const closePanelBtn = document.getElementById('closePanelBtn');
+        const panelMessages = document.getElementById('panelMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendMessage');
+        const quickChatBtn = document.getElementById('quickChatBtn');
+        const notificationBadge = document.getElementById('notificationBadge');
+
+        let hasUnreadMessage = true;
+
+        function openChatPanel() {
+            chatPanel.classList.add('show');
+            notificationBadge.style.display = 'none';
+            hasUnreadMessage = false;
+            setTimeout(() => messageInput.focus(), 300);
+        }
+
+        function closeChatPanel() {
+            chatPanel.classList.remove('show');
+        }
+
+        quickChatBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openChatPanel();
+        });
+
+        closePanelBtn.addEventListener('click', function() {
+            closeChatPanel();
+        });
+
         sendButton.addEventListener('click', () => {
             const text = messageInput.value.trim();
             if (!text) return;
             
-            addMessage(text, true);
+            sendMessageToAI(text);
             messageInput.value = '';
-            
-            // Simulate typing and response
-            setTimeout(() => {
-                addMessage("Great question! Let's work through this step by step. What specific part of derivatives are you finding challenging?", false);
-            }, 1000);
         });
 
-        // Send message on Enter key
         messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -729,7 +1272,6 @@
             }
         });
 
-        // Close panel if clicking outside (optional)
         document.addEventListener('click', (e) => {
             if (chatPanel.classList.contains('show') && 
                 !chatPanel.contains(e.target) && 
@@ -739,26 +1281,32 @@
             }
         });
 
-        // Reset notification when chat is opened
-        chatPanel.addEventListener('transitionend', (e) => {
-            if (chatPanel.classList.contains('show') && hasUnreadMessage) {
-                notificationBadge.style.display = 'none';
-                hasUnreadMessage = false;
-            }
+        // Modal functionality
+        const modal = document.getElementById('wrappedModal');
+        const statsBtn = document.getElementById('statsButton');
+        const closeModal = document.getElementById('closeModal');
+        
+        statsBtn.addEventListener('click', () => modal.style.display = 'flex');
+        closeModal.addEventListener('click', () => modal.style.display = 'none');
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
         });
-    </script>
-    <script>
-        // Screen size detection with user preference
+
+        // VS Mode card click
+        document.getElementById('vsModeCard').addEventListener('click', function() {
+            window.location.href = 'VS_Mobile.html';
+        });
+        document.getElementById('vsModeCard').style.cursor = 'pointer';
+
+        // Screen size detection
         function checkScreenSize() {
             const mobileBreakpoint = 768;
             const isMobilePage = window.location.pathname.includes('mobile-index.html');
             const isDesktopPage = !isMobilePage && window.location.pathname.includes('index.html');
             const isMobileSize = window.innerWidth <= mobileBreakpoint;
             
-            // Check if user has manually overridden the detection
             const userPreference = sessionStorage.getItem('preferredView');
             
-            // Redirect logic
             if (userPreference === 'mobile' && !isMobilePage) {
                 window.location.href = 'mobile-index.html';
                 return;
@@ -767,15 +1315,13 @@
                 return;
             }
             
-            // Auto-detect if no user preference set
             if (isMobileSize && !isMobilePage) {
                 window.location.href = 'mobile-index.html';
             } else if (!isMobileSize && isMobilePage) {
                 window.location.href = 'index.html';
-            }
+            } 
         }
 
-        // Add view toggle buttons to your pages (call these functions when buttons are clicked)
         function forceMobileView() {
             sessionStorage.setItem('preferredView', 'mobile');
             window.location.href = 'mobile-index.html';
@@ -786,34 +1332,12 @@
             window.location.href = 'index.html';
         }
 
-        // Initial check
         checkScreenSize();
-
-        // Debounced resize handler
         let resizeTimeout;
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(checkScreenSize, 200);
         });
-</script>
-<script>
-    // Make VS mode card clickable without affecting CSS
-    document.addEventListener('DOMContentLoaded', function() {
-        // Get all mode cards
-        const modeCards = document.querySelectorAll('.mode-card-mobile');
-        
-        // The first card is VS mode (based on your order)
-        if (modeCards.length > 0) {
-            const vsModeCard = modeCards[0];
-            
-            vsModeCard.addEventListener('click', function() {
-                window.location.href = 'VS_Mobile.html';
-            });
-            
-            // Add cursor pointer for better UX (this doesn't break layout)
-            vsModeCard.style.cursor = 'pointer';
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
