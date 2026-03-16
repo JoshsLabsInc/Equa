@@ -7,6 +7,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="tablogo.png"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Original CSS (kept exactly as provided) -->
     <style>
         * {
             margin: 0;
@@ -69,11 +70,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1.1;
-        }
-
-        .logo-icon {
-            background: transparent;
-            border: none;
         }
 
         .badge {
@@ -241,7 +237,6 @@
             margin-bottom: 1.5rem;
         }
         .coach-avatar-large {
-            background: linear-gradient(145deg, #294a7a, #10233f);
             width: 70px;
             height: 70px;
             border-radius: 26px;
@@ -251,6 +246,13 @@
             font-size: 3rem;
             color: #ffecbb;
             box-shadow: 0 12px 14px -8px #10233f40;
+            overflow: hidden;
+            background: linear-gradient(145deg, #294a7a, #10233f);
+        }
+        .coach-avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .coach-info h3 {
             font-size: 1.5rem;
@@ -384,7 +386,7 @@
             max-width: 700px;
             width: 90%;
             background: white;
-            border-radius: 48px;
+            border-radius: 10px;
             padding: 2.2rem 2rem;
             box-shadow: 0 40px 60px -10px #10233f;
             position: relative;
@@ -411,11 +413,11 @@
             scrollbar-color: #2b4bff #dbe2f0;
         }
         .carousel::-webkit-scrollbar {
-            height: 8px;
+            height: 6px;
         }
         .carousel::-webkit-scrollbar-thumb {
             background: #2b4bff;
-            border-radius: 20px;
+            border-radius: 40px;
         }
         .slide {
             scroll-snap-align: start;
@@ -495,9 +497,295 @@
                 position: static;
             }
         }
+
+        /* Updated CSS for setup modal to fit screen */
+.setup-modal {
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    text-align: center;
+    padding: 1.5rem !important;
+    scrollbar-width: thin;
+    scrollbar-color: #2b4bff #eef2f7;
+}
+
+.setup-modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.setup-modal::-webkit-scrollbar-track {
+    background: #eef2f7;
+    border-radius: 10px;
+}
+
+.setup-modal::-webkit-scrollbar-thumb {
+    background: #2b4bff;
+    border-radius: 10px;
+}
+
+.setup-modal h2 {
+    font-size: 1.8rem !important;
+    margin-bottom: 0.25rem !important;
+}
+
+.setup-modal p {
+    margin-bottom: 1rem !important;
+}
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+    margin: 1rem 0;
+}
+
+.avatar-option {
+    cursor: pointer;
+    border-radius: 16px;
+    padding: 0.8rem;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.avatar-option img {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    margin-bottom: 0.3rem;
+}
+
+.avatar-name {
+    font-weight: 600;
+    color: #1b2b4b;
+    font-size: 0.9rem;
+}
+
+.setup-input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #eef2f7;
+    border-radius: 40px;
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.setup-button {
+    background: #2b4bff;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 40px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 480px) {
+    .setup-modal {
+        width: 95%;
+        padding: 1.2rem !important;
+    }
+    
+    .setup-modal h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    .avatar-grid {
+        gap: 0.5rem;
+    }
+    
+    .avatar-option img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .avatar-name {
+        font-size: 0.8rem;
+    }
+    
+    .setup-input {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+    
+    .setup-button {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* Small height screens */
+@media (max-height: 700px) {
+    .setup-modal {
+        max-height: 85vh;
+    }
+    
+    .avatar-grid {
+        margin: 0.5rem 0;
+    }
+    
+    .avatar-option {
+        padding: 0.5rem;
+    }
+    
+    .avatar-option img {
+        width: 50px;
+        height: 50px;
+    }
+}
+        
+        .setup-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #eef2f7;
+            border-radius: 50px;
+            font-size: 1rem;
+            margin: 1rem 0;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .setup-input:focus {
+            border-color: #2b4bff;
+        }
+        
+        .setup-button {
+            background: #2b4bff;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        
+        .setup-button:hover {
+            background: #1f3ed0;
+            transform: translateY(-2px);
+        }
+        
+        .setup-button:disabled {
+            background: #a0b0cc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            gap: 0.3rem;
+            padding: 0.5rem;
+            justify-content: center;
+        }
+        
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #2b4bff;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+        
+        .goal-badge {
+            background: #e2ecfe;
+            color: #1f449b;
+            border-radius: 20px;
+            padding: 0.3rem 1rem;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Reboot notification */
+        .reboot-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
+    <!-- Setup Modal -->
+    <div class="modal-overlay" id="setupModal" style="display: flex;">
+        <div class="modal-content setup-modal">
+            <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">👋 Welcome to Equa!</h2>
+            <p style="color: #4d6587; margin-bottom: 2rem;">Let's get to know each other</p>
+            
+            <input type="text" class="setup-input" id="userName" placeholder="What's your name? (e.g., Alex)" autocomplete="off">
+            
+            <div style="margin: 2rem 0;">
+                <p style="font-weight: 600; margin-bottom: 1rem;">Choose your AI coach</p>
+                <div class="avatar-grid" id="avatarGrid">
+                    <div class="avatar-option" data-avatar="maya" data-name="Maya" data-gender="female">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&hair=long&accessories=round&backgroundColor=b6e3f4" alt="Maya">
+                        <div class="avatar-name">Maya</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="sabrina" data-name="Sabrina" data-gender="female">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sabrina&mouth=smile&eyes=happy&hair=short&accessories=round&backgroundColor=ffd5dc" alt="Sabrina">
+                        <div class="avatar-name">Sabrina</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="Joshua" data-name="Joshua" data-gender="male">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Joshua&mouth=smile&eyes=happy&hair=fonze&accessories=round&backgroundColor=ffdfbf" alt="Joshua">
+                        <div class="avatar-name">Joshua</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="sam" data-name="Sam" data-gender="neutral">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sam&mouth=smile&eyes=happy&hair=pixie&accessories=round&backgroundColor=c0aede" alt="Sam">
+                        <div class="avatar-name">Sam</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="jovy" data-name="Jovy" data-gender="neutral">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jovy&mouth=smile&eyes=happy&hair=curly&accessories=round&backgroundColor=d1d4f0" alt="Jovy">
+                        <div class="avatar-name">Jovy</div>
+                    </div>
+                    <div class="avatar-option" data-avatar="ray" data-name="Ray" data-gender="neutral">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ray&mouth=smile&eyes=happy&hair=bob&accessories=round&backgroundColor=b6e3f4" alt="Ray">
+                        <div class="avatar-name">Ray</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="setup-button" id="startJourneyBtn" disabled>Start My Math Journey</button>
+            <p style="color: #8699bb; font-size: 0.8rem; margin-top: 1rem;">Your preferences will be saved locally</p>
+            <p style="color: #8699bb; font-size: 0.7rem; margin-top: 0.5rem;">💡 Tip: Type "reboot" in console to reset and choose again</p>
+        </div>
+    </div>
+
+    <!-- Analytics Modal -->
     <div class="modal-overlay" id="wrappedModal">
         <div class="modal-content">
             <span class="close-modal" id="closeModalBtn">&times;</span>
@@ -539,10 +827,8 @@
         <div class="header">
             <div class="logo">
                 <div class="logo-icon">
-                    <img src="logo.png" alt="Equa logo"></i>
-                    <i class="fas fa-image" style="display:none;"></i>
+                    <img src="logo.png" alt="Equa logo">
                 </div>
-                <p> </p>
                 <span class="badge"><i class="fas fa-robot"></i> AI math coach</span>
             </div>
             <div style="display:flex; gap:0.8rem; align-items:center;">
@@ -550,16 +836,16 @@
                 <div class="user-profile">
                     <i class="fas fa-star" style="color: #f5b342;"></i>
                     <span>ELO 843</span>
-                    <div class="avatar-small">JS</div>
+                    <div class="avatar-small" id="userAvatar">JS</div>
                 </div>
             </div>
         </div>
 
         <div class="dashboard-grid">
             <div class="modes-section">
-                <div class="welcome-message">
+                <div class="welcome-message" id="dynamicWelcome">
                     <i class="fas fa-hand-wave" style="color:#2b4bff; margin-right:0.5rem;"></i> 
-                    Welcome back, Josh. Your AI coach Maya has prepared new challenges based on your last session.
+                    Loading your personalized experience...
                 </div>
                 <h2><i class="fas fa-bolt" style="color:#2b4bff;"></i> practice modes</h2>
 
@@ -635,44 +921,32 @@
 
             <div class="ai-coach-panel">
                 <div class="coach-header">
-                    <div class="coach-avatar-large">
-                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&hair=long&accessories=round&backgroundColor=b6e3f4,ffd5dc,ffdfbf" alt="Maya bitmoji" style="width:100%; height:100%; object-fit:cover; border-radius:26px;">
+                    <div class="coach-avatar-large" id="coachAvatar">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&hair=long&accessories=round&backgroundColor=b6e3f4" alt="Coach">
                     </div>
                     <div class="coach-info">
-                        <h3>Maya <span style="font-size:0.9rem; font-weight:400;">(your coach)</span></h3>
-                        <p><i class="fas fa-circle" style="color:#3bb55c; font-size:0.6rem;"></i> online · persistent memory</p>
-                        <span class="memory-badge"><i class="fas fa-brain"></i> 100% adaptive</span>
+                        <h3 id="coachName">Maya <span style="font-size:0.9rem; font-weight:400;">(your coach)</span></h3>
+                        <p><i class="fas fa-circle" style="color:#3bb55c; font-size:0.6rem;"></i> online · adaptive memory</p>
+                        <span class="memory-badge"><i class="fas fa-brain"></i> 100% personalized</span>
                     </div>
                 </div>
 
                 <div class="chat-window" id="chatWindow">
                     <div class="message bot">
                         <div class="msg-bubble">
-                            👋 Hi Josh, ready to practice derivatives? I saw you struggled with the chain rule yesterday.
+                            👋 Hi there! I'm your AI math coach. Let's set some goals and crush them together!
                             <div class="msg-time">just now</div>
-                        </div>
-                    </div>
-                    <div class="message user">
-                        <div class="msg-bubble">
-                            yeah, let's do a few warm-ups. maybe vs mode?
-                            <div class="msg-time">a few sec ago</div>
-                        </div>
-                    </div>
-                    <div class="message bot">
-                        <div class="msg-bubble">
-                            Great choice! I'll adjust the opponent speed to be encouraging. Want a quick hint on the power rule first?
-                            <div class="msg-time">now</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="chat-input-area">
-                    <input type="text" placeholder="Ask Maya..." id="chatInput">
+                    <input type="text" placeholder="Ask me anything..." id="chatInput">
                     <button id="sendMsgBtn"><i class="fas fa-paper-plane"></i></button>
                 </div>
-                <p style="font-size:0.75rem; color:#738eb0; margin-top:0.6rem; margin-left:0.3rem;">
-                    <i class="fas fa-palette"></i> avatar style: bitmoji‑like · you can change hair, skin, gender
-                </p>
+                <div id="goalDisplay" class="goal-badge" style="display: none;">
+                    <i class="fas fa-bullseye"></i> <span></span>
+                </div>
             </div>
         </div>
 
@@ -680,8 +954,363 @@
             Equa – adaptive AI math engine · blueprint by Josh Sooknanan · UI demo
         </footer>
     </div>
+
     <script>
-        console.log("Josh's Labs est 2024");
+        // User configuration
+        let userConfig = null;
+        let conversationHistory = [];
+        let lastResponseIndex = {};
+
+        // ==================== REBOOT FUNCTIONALITY ====================
+        window.reboot = function() {
+            // Clear all storage
+            localStorage.clear();
+            
+            // Clear cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+            });
+            
+            // Reset userConfig
+            userConfig = null;
+            
+            // Show setup modal
+            document.getElementById('setupModal').style.display = 'flex';
+            
+            // Reset avatar selection
+            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('startJourneyBtn').disabled = true;
+            document.getElementById('userName').value = '';
+            
+            // Reset chat
+            document.getElementById('chatWindow').innerHTML = `
+                <div class="message bot">
+                    <div class="msg-bubble">
+                        👋 Hi there! I'm your AI math coach. Let's set some goals and crush them together!
+                        <div class="msg-time">just now</div>
+                    </div>
+                </div>
+            `;
+            
+            console.log('%c✅ Equa reset! You can now choose a new coach.', 'color: #2b4bff; font-size: 14px;');
+        };
+
+        // Check for existing user config on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedConfig = localStorage.getItem('equa_user_config');
+            
+            if (savedConfig) {
+                userConfig = JSON.parse(savedConfig);
+                document.getElementById('setupModal').style.display = 'none';
+                updateUIWithConfig();
+                displayWelcomeMessage();
+            } else {
+                document.getElementById('setupModal').style.display = 'flex';
+            }
+            
+            console.log('%c🔧 Type "reboot()" in console to reset and choose a new coach', 'color: #f5b342; font-size: 12px;');
+        });
+
+        // Avatar selection
+        const avatarOptions = document.querySelectorAll('.avatar-option');
+        let selectedAvatar = null;
+
+        avatarOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                avatarOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedAvatar = {
+                    avatar: this.dataset.avatar,
+                    name: this.dataset.name,
+                    gender: this.dataset.gender,
+                    imageUrl: this.querySelector('img').src
+                };
+                document.getElementById('startJourneyBtn').disabled = false;
+            });
+        });
+
+        // Start journey button
+        document.getElementById('startJourneyBtn').addEventListener('click', function() {
+            const userName = document.getElementById('userName').value.trim();
+            
+            if (!userName) {
+                alert('Please enter your name');
+                return;
+            }
+            
+            if (!selectedAvatar) {
+                alert('Please select an avatar');
+                return;
+            }
+
+            userConfig = {
+                userName: userName,
+                coach: selectedAvatar,
+                createdAt: new Date().toISOString(),
+                userId: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+            };
+
+            // Save to localStorage
+            localStorage.setItem('equa_user_config', JSON.stringify(userConfig));
+
+            document.getElementById('setupModal').style.display = 'none';
+            updateUIWithConfig();
+            displayWelcomeMessage();
+        });
+
+        // Update UI with user configuration
+        function updateUIWithConfig() {
+            if (!userConfig) return;
+
+            // Update welcome message with user's name
+            const welcomeDiv = document.getElementById('dynamicWelcome');
+            const hour = new Date().getHours();
+            let timeGreeting;
+            
+            if (hour < 12) timeGreeting = 'morning';
+            else if (hour < 17) timeGreeting = 'afternoon';
+            else timeGreeting = 'evening';
+            
+            welcomeDiv.innerHTML = `<i class="fas fa-hand-wave" style="color:#2b4bff; margin-right:0.5rem;"></i> 
+            Good ${timeGreeting}, ${userConfig.userName}! Your coach ${userConfig.coach.name} is ready to help you excel at math.`;
+
+            // Update coach avatar and name
+            document.getElementById('coachAvatar').innerHTML = `<img src="${userConfig.coach.imageUrl}" alt="${userConfig.coach.name}">`;
+            document.getElementById('coachName').innerHTML = `${userConfig.coach.name} <span style="font-size:0.9rem; font-weight:400;">(your coach)</span>`;
+
+            // Update user avatar
+            const userAvatar = document.getElementById('userAvatar');
+            userAvatar.textContent = userConfig.userName.charAt(0).toUpperCase();
+        }
+
+        // Display welcome message
+        function displayWelcomeMessage() {
+            const chatWindow = document.getElementById('chatWindow');
+            chatWindow.innerHTML = '';
+            
+            const welcomeMsgs = [
+                `Hi ${userConfig.userName}! I'm ${userConfig.coach.name}, your personal math coach. I'm here to make math fun and understandable. What would you like to explore today? 🌟`,
+                `Hey ${userConfig.userName}! Great to see you. I'm ${userConfig.coach.name} and I'll help you become a math wizard. Ready to start? 🧙‍♂️`,
+                `Welcome ${userConfig.userName}! I'm ${userConfig.coach.name}. Whether it's algebra, calculus, or anything in between, we'll tackle it together. What's on your mind? 📚`
+            ];
+            
+            addMessageToChat('bot', welcomeMsgs[Math.floor(Math.random() * welcomeMsgs.length)]);
+        }
+
+        // Add message to chat
+        function addMessageToChat(sender, text) {
+            const chatWindow = document.getElementById('chatWindow');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${sender}`;
+            
+            // Format text with line breaks
+            const formattedText = text.replace(/\n/g, '<br>');
+            
+            msgDiv.innerHTML = `<div class="msg-bubble">${formattedText}<div class="msg-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div></div>`;
+            chatWindow.appendChild(msgDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const chatWindow = document.getElementById('chatWindow');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `<div class="msg-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div><div class="msg-time">now</div></div>`;
+            chatWindow.appendChild(typingDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        // Hide typing indicator
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+
+        // Get random response from array without repeating
+        function getUniqueResponse(category, responses) {
+            if (!lastResponseIndex[category]) {
+                lastResponseIndex[category] = -1;
+            }
+            
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * responses.length);
+            } while (newIndex === lastResponseIndex[category] && responses.length > 1);
+            
+            lastResponseIndex[category] = newIndex;
+            return responses[newIndex];
+        }
+
+        // Generate smart response
+        function generateSmartResponse(userMessage) {
+            const lowerMsg = userMessage.toLowerCase();
+            const userName = userConfig.userName;
+            const coachName = userConfig.coach.name;
+            
+            // Greetings
+            if (lowerMsg.match(/^(hi|hello|hey|howdy|sup|greetings)/)) {
+                const greetings = [
+                    `Hey ${userName}! Ready to crush some math problems today? 🚀`,
+                    `Hello ${userName}! I was just thinking about what we should learn today. Any preferences? 😊`,
+                    `Hi ${userName}! Your favorite math coach is here to help. What shall we tackle? 💪`,
+                    `Hey there ${userName}! I'm excited to see you. Let's make some math magic happen! ✨`
+                ];
+                return greetings[Math.floor(Math.random() * greetings.length)];
+            }
+            
+            // How are you
+            if (lowerMsg.includes('how are you')) {
+                const feelings = [
+                    `I'm doing great, ${userName}! Especially now that you're here to learn. How are you feeling today? 😊`,
+                    `I'm fantastic! I love helping students discover the beauty of math. How's your day going? 🌟`,
+                    `I'm excellent! A bit excited actually - I have some cool math concepts to share with you. Ready? 🎉`
+                ];
+                return feelings[Math.floor(Math.random() * feelings.length)];
+            }
+            
+            // Practice requests
+            if (lowerMsg.includes('practice') || lowerMsg.includes('problem') || lowerMsg.includes('exercise')) {
+                const problems = [
+                    `Let's warm up with derivatives! Find f'(x) if f(x) = 4x³ - 2x² + 7`,
+                    `Try this integral: ∫ (3x² + 2x + 1) dx`,
+                    `Here's a limit problem: lim(x→3) (x² - 9)/(x - 3)`,
+                    `Solve for x: 2x² + 5x - 12 = 0`,
+                    `Find the derivative: d/dx [sin(x) + cos(x)]`,
+                    `Evaluate: ∫ (6x⁵ - 4x³) dx`
+                ];
+                return problems[Math.floor(Math.random() * problems.length)];
+            }
+            
+            // Help with derivatives
+            if (lowerMsg.includes('derivative')) {
+                const derivExplanations = [
+                    `Derivatives measure the rate of change - like finding the speed of a car at an exact moment. For xⁿ, the derivative is n·xⁿ⁻¹. So derivative of x³ is 3x²! Want to try one? 📈`,
+                    `Think of derivatives as the "slope finder" for any point on a curve. The power rule is your best friend: d/dx[xⁿ] = n·xⁿ⁻¹. For example, derivative of x⁴ is 4x³. Make sense? 🤔`,
+                    `Derivatives are all about change! The derivative of x² is 2x because we multiply by the power (2) and reduce it by 1. It's like magic but it's math! ✨`
+                ];
+                return derivExplanations[Math.floor(Math.random() * derivExplanations.length)];
+            }
+            
+            // Help with integrals
+            if (lowerMsg.includes('integral')) {
+                const intExplanations = [
+                    `Integration is the reverse of differentiation! ∫ xⁿ dx = (xⁿ⁺¹)/(n+1) + C. For example, ∫ x² dx = x³/3 + C. The +C is super important! 📊`,
+                    `Think of integrals as area collectors under curves. ∫ 2x dx = x² + C because if we differentiate x², we get 2x. It's working backwards! 🔄`,
+                    `Integrals add up tiny pieces to find the whole. ∫ x dx = x²/2 + C. Practice makes perfect with these! 🎯`
+                ];
+                return intExplanations[Math.floor(Math.random() * intExplanations.length)];
+            }
+            
+            // Help with limits
+            if (lowerMsg.includes('limit')) {
+                const limitExplanations = [
+                    `Limits tell us what happens as we get REALLY close to something. For continuous functions, just plug in the number! But watch out for 0/0 situations - those need special tricks. 🎯`,
+                    `Limits are the foundation of calculus! They describe behavior approaching a point. For rational functions, factoring often helps. Want an example? 📐`,
+                    `Think of limits as "approaching but not touching" - like getting infinitely close to a number. For (x²-4)/(x-2) as x→2, factor to (x-2)(x+2)/(x-2) = x+2, so limit is 4! ✨`
+                ];
+                return limitExplanations[Math.floor(Math.random() * limitExplanations.length)];
+            }
+            
+            // Encouragement when struggling
+            if (lowerMsg.includes('hard') || lowerMsg.includes('difficult') || lowerMsg.includes('stuck') || lowerMsg.includes('confused')) {
+                const encouragement = [
+                    `Hey ${userName}, it's completely normal to find this tricky! Every mathematician has been where you are. Let's break it down together. What specific part is confusing? 💪`,
+                    `You know what? The fact that you're pushing through confusion is exactly how we grow. Take a deep breath and let's tackle this step by step. You've got this! 🌟`,
+                    `I totally get it - math can be challenging. But remember, you've already solved ${Math.floor(Math.random() * 20 + 10)} problems with me! Let's work through this one together. 🤝`
+                ];
+                return encouragement[Math.floor(Math.random() * encouragement.length)];
+            }
+            
+            // Progress questions
+            if (lowerMsg.includes('progress') || lowerMsg.includes('improving') || lowerMsg.includes('getting better')) {
+                const progress = [
+                    `You're making wonderful progress, ${userName}! I can see your problem-solving skills sharpening. Keep up this momentum! 📈`,
+                    `You know what I love? Your persistence. That's the #1 predictor of success in math. You're doing amazing! 🚀`,
+                    `Based on our sessions, you're getting faster at recognizing patterns. That's a huge sign of improvement! 🎯`
+                ];
+                return progress[Math.floor(Math.random() * progress.length)];
+            }
+            
+            // Goals
+            if (lowerMsg.includes('goal') || lowerMsg.includes('target')) {
+                const goals = [
+                    `Let's set some SMART goals! How about mastering the power rule this week with 5 practice problems daily? Then we can move to chain rule. Sound good? 🎯`,
+                    `I love your ambition! Let's aim for 80% accuracy on derivatives by Friday. I'll give you progressively challenging problems. Deal? 🤝`,
+                    `Great idea to set goals! How about: 1) Complete 10 problems daily 2) Master one new concept weekly 3) Increase speed by 20%. What do you think? 📋`
+                ];
+                return goals[Math.floor(Math.random() * goals.length)];
+            }
+            
+            // Thanks
+            if (lowerMsg.includes('thank')) {
+                const thanks = [
+                    `You're so welcome, ${userName}! That's what I'm here for. Anything else you'd like to explore? 😊`,
+                    `My pleasure! Seeing you learn makes my day. What's next on our math adventure? 🚀`,
+                    `Anytime, ${userName}! I'm always here when you need a math buddy. Ready for another challenge? 💪`
+                ];
+                return thanks[Math.floor(Math.random() * thanks.length)];
+            }
+            
+            // Default responses (varied)
+            const defaultResponses = [
+                `That's interesting, ${userName}! While I think about that, would you like to practice some derivatives or integrals?`,
+                `Hmm, tell me more! In the meantime, we could work on some algebra problems if you'd like.`,
+                `I'm here to help with math, ${userName}! Want to try a practice problem or learn a new concept?`,
+                `Great question! While I process that, remember that math is all about practice. Want to do a quick problem?`,
+                `You know ${userName}, every math question is a good question. Would you like to explore derivatives today?`
+            ];
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        // Send message to AI
+        async function sendMessageToAI(userMessage) {
+            if (!userConfig) {
+                alert('Please set up your profile first');
+                return;
+            }
+
+            // Add user message to chat
+            addMessageToChat('user', userMessage);
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Simulate thinking time
+            setTimeout(() => {
+                // Hide typing indicator
+                hideTypingIndicator();
+
+                // Generate smart response
+                const response = generateSmartResponse(userMessage);
+                
+                // Add AI response to chat
+                addMessageToChat('bot', response);
+            }, 1000 + Math.random() * 500); // Random delay between 1-1.5 seconds
+        }
+
+        // Event listeners
+        document.getElementById('sendMsgBtn').addEventListener('click', function() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (message) {
+                sendMessageToAI(message);
+                input.value = '';
+            }
+        });
+
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const message = this.value.trim();
+                if (message) {
+                    sendMessageToAI(message);
+                    this.value = '';
+                }
+            }
+        });
+
+        // Modal functionality
         const modal = document.getElementById('wrappedModal');
         const analyticsTab = document.getElementById('analyticsTab');
         const closeBtn = document.getElementById('closeModalBtn');
@@ -698,104 +1327,47 @@
             if (e.target === modal) modal.style.display = 'none';
         });
 
-        // chat simulation (same as before)
-        const sendBtn = document.getElementById('sendMsgBtn');
-        const chatInput = document.getElementById('chatInput');
-        const chatWindow = document.getElementById('chatWindow');
-
-        function addUserMessage(text) {
-            if (!text.trim()) return;
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'message user';
-            msgDiv.innerHTML = `<div class="msg-bubble">${text}<div class="msg-time">just now</div></div>`;
-            chatWindow.appendChild(msgDiv);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-
-            setTimeout(() => {
-                const botDiv = document.createElement('div');
-                botDiv.className = 'message bot';
-                let answer = "I'm here to help! Try a mode from the left. 😊";
-                if (text.toLowerCase().includes('derivative')) answer = "Derivatives are my specialty! Want to try VS mode or a quick hint?";
-                else if (text.toLowerCase().includes('hint')) answer = "Sure! The power rule: d/dx (xⁿ) = n·xⁿ⁻¹. Example: d/dx (x⁴) = 4x³.";
-                botDiv.innerHTML = `<div class="msg-bubble">${answer}<div class="msg-time">now</div></div>`;
-                chatWindow.appendChild(botDiv);
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-            }, 400);
-        }
-
-        sendBtn.addEventListener('click', () => {
-            addUserMessage(chatInput.value);
-            chatInput.value = '';
+        // Handle mode item clicks
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.mode-item[data-href]').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (!e.target.closest('.hover-bubble')) {
+                        const href = this.getAttribute('data-href');
+                        if (href) window.location.href = href;
+                    }
+                });
+                item.style.cursor = 'pointer';
+            });
         });
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                addUserMessage(chatInput.value);
-                chatInput.value = '';
-            }
-        });
-    </script>
-    <script>
+
+        // Mobile detection
         function checkScreenSize() {
-        const mobileBreakpoint = 768;
-        const isMobilePage = window.location.pathname.includes('mobile-index.html');
-        const isDesktopPage = !isMobilePage && window.location.pathname.includes('index.html');
-        const isMobileSize = window.innerWidth <= mobileBreakpoint;
-        
-        // Check if user has manually overridden the detection
-        const userPreference = sessionStorage.getItem('preferredView');
-        
-        // Redirect logic
-        if (userPreference === 'mobile' && !isMobilePage) {
-            window.location.href = 'mobile-index.html';
-            return;
-        } else if (userPreference === 'desktop' && isMobilePage) {
-            window.location.href = 'index.html';
-            return;
-        }
-        
-        // Auto-detect if no user preference set
-        if (isMobileSize && !isMobilePage) {
-            window.location.href = 'mobile-index.html';
-        } else if (!isMobileSize && isMobilePage) {
-            window.location.href = 'index.html';
-        }
+            const mobileBreakpoint = 768;
+            const isMobilePage = window.location.pathname.includes('mobile-index.html');
+            const isMobileSize = window.innerWidth <= mobileBreakpoint;
+            const userPreference = sessionStorage.getItem('preferredView');
+            
+            if (userPreference === 'mobile' && !isMobilePage) {
+                window.location.href = 'mobile-index.html';
+                return;
+            } else if (userPreference === 'desktop' && isMobilePage) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            if (isMobileSize && !isMobilePage) {
+                window.location.href = 'mobile-index.html';
+            } else if (!isMobileSize && isMobilePage) {
+                window.location.href = 'index.html';
+            }
         }
 
-        // Add view toggle buttons to your pages (call these functions when buttons are clicked)
-        function forceMobileView() {
-        sessionStorage.setItem('preferredView', 'mobile');
-        window.location.href = 'mobile-index.html';
-        }
-
-        function forceDesktopView() {
-        sessionStorage.setItem('preferredView', 'desktop');
-        window.location.href = 'index.html';
-        }
-
-        // Initial check
         checkScreenSize();
-
-        // Debounced resize handler
         let resizeTimeout;
         window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(checkScreenSize, 200);
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(checkScreenSize, 200);
         });
     </script>
-    <script>
-    // Handle click for any mode item with data-href attribute
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.mode-item[data-href]').forEach(item => {
-            item.addEventListener('click', function(e) {
-                // Don't navigate if clicking the hover bubble
-                if (!e.target.closest('.hover-bubble')) {
-                    const href = this.getAttribute('data-href');
-                    if (href) window.location.href = href;
-                }
-            });
-            item.style.cursor = 'pointer';
-        });
-    });
-</script>
 </body>
 </html>
