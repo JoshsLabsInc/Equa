@@ -809,7 +809,7 @@
                 <div class="mode-icon-mobile"><i class="fas fa-trophy"></i></div>
                 <div><div class="mode-title-mobile">Ranked mode</div><div class="mode-desc-mobile">ELO progression</div></div>
             </div>
-            <div class="mode-card-mobile">
+            <div class="mode-card-mobile" id="masterypath">
                 <div class="mode-icon-mobile"><i class="fas fa-diagram-project"></i></div>
                 <div><div class="mode-title-mobile">Mastery path</div><div class="mode-desc-mobile">unlock topics</div></div>
             </div>
@@ -1297,6 +1297,11 @@
             window.location.href = 'VS_Mobile.html';
         });
         document.getElementById('vsModeCard').style.cursor = 'pointer';
+
+        document.getElementById('masterypath').addEventListener('click', function() {
+            window.location.href = 'mastery_path.html';
+        });
+        document.getElementById('masterypath').style.cursor = 'pointer';
 
         // Screen size detection
         function checkScreenSize() {
