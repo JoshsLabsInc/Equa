@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Equa · Ranked — Integrity First</title>
+    <link rel="shortcut icon" type="image/x-icon" href="tablogo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #f0f4fa, #e6ecf5);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .ranked-container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(14px);
+            border-radius: 3rem;
+            box-shadow: 0 25px 50px -12px #10224060;
+            padding: 2rem 2.5rem;
+            border: 1px solid #ffffff99;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .back-btn {
+            background: #eef2f7;
+            border: none;
+            color: #1e2f4a;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .back-btn:hover {
+            background: #dae1ec;
+            transform: translateX(-5px);
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #162b4a, #2f4674);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stats {
+            display: flex;
+            gap: 2rem;
+            background: white;
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2b4bff;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #5c6f91;
+        }
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .problem-panel {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 2rem;
+            box-shadow: 0 20px 30px -12px #1f3a6030;
+        }
+        .equation-display {
+            font-size: 2rem;
+            font-family: 'Courier New', monospace;
+            background: #f5f9ff;
+            padding: 1.2rem;
+            border-radius: 1.8rem;
+            text-align: center;
+            color: #0a1a33;
+            border: 2px dashed #b3c7e8;
+            margin-bottom: 2rem;
+        }
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        .step-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: #f8faff;
+            padding: 0.8rem 1.2rem;
+            border-radius: 60px;
+            border: 1px solid #eef2f8;
+            flex-wrap: wrap;
+        }
+        .step-text {
+            font-size: 1.2rem;
+            font-family: 'Courier New', monospace;
+            color: #1b2b4b;
+        }
+        .blank-input {
+            width: 80px;
+            padding: 0.5rem 0.8rem;
+            background: white;
+            border: 2px solid #dbe2f0;
+            border-radius: 40px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            text-align: center;
+            outline: none;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        .blank-input::-webkit-outer-spin-button,
+        .blank-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .blank-input:focus {
+            border-color: #1e3f70;
+            box-shadow: 0 0 0 4px rgba(30,63,112,0.1);
+        }
+        .check-step-btn {
+            background: #2b4bff;
+            border: none;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 8px #2b4bff40;
+            margin-left: auto;
+        }
+        .check-step-btn:hover:not(:disabled) {
+            background: #1f3ed0;
+        }
+        .check-step-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .step-feedback {
+            font-size: 0.9rem;
+            color: #ffb347;
+            min-width: 40px;
+        }
+        .checks-left {
+            margin: 1rem 0;
+            font-weight: 600;
+            color: #1e3a5f;
+        }
+        .action-btns {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .btn {
+            flex: 1;
+            background: white;
+            border: 1px solid #cdd9ec;
+            padding: 1rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #1e2f4a;
+        }
+        .btn-primary {
+            background: #1e2f4a;
+            color: white;
+            border: none;
+            box-shadow: 0 8px 16px -6px #162b44;
+        }
+        .btn-primary:hover:not(:disabled) {
+            background: #2b4062;
+        }
+        .btn-secondary:hover {
+            background: #e8f0fe;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .coach-panel {
+            background: white;
+            border-radius: 2.5rem;
+            padding: 1.8rem 1.5rem;
+            box-shadow: 0 20px 30px -12px #1f3a6030;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .coach-header {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .coach-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 30px;
+            overflow: hidden;
+            background: #ffe0b0;
+            border: 3px solid white;
+            box-shadow: 0 8px 14px -6px #0f2642;
+        }
+        .coach-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .coach-info h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #11355e;
+        }
+        .coach-info p {
+            color: #4b6a93;
+        }
+        .chat-bubble {
+            background: #ecf3fe;
+            border-radius: 1.8rem 1.8rem 1.8rem 0.5rem;
+            padding: 1.2rem;
+            color: #1b2d4a;
+            border-left: 4px solid #2b4bff;
+        }
+        .chat-bubble .sender {
+            font-weight: 600;
+            color: #2b4bff;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: white;
+            max-width: 450px;
+            width: 90%;
+            border-radius: 48px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 40px 60px -10px #0e1e32;
+        }
+        .modal-content h2 { font-size: 2.2rem; margin-bottom: 1rem; color: #14273e; }
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+        .modal-actions button {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border: none;
+            cursor: pointer;
+            background: #1e2f4a;
+            color: white;
+        }
+        .modal-actions button.secondary {
+            background: #e2e9f5;
+            color: #1e2f4a;
+        }
+        .celebration-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px; height: 20px;
+            background: #ffd700;
+            opacity: 0.7;
+            animation: fall 3s linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .checkmark-burst {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            color: #2bff4b;
+            animation: burst 0.5s ease-out forwards;
+            z-index: 10000;
+        }
+        @keyframes burst {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5); }
+        }
+        .timer {
+            font-size: 2rem;
+            font-weight: 800;
+            background: #e6edf8;
+            border-radius: 60px;
+            padding: 0.5rem 1.5rem;
+            display: inline-block;
+            color: #14273e;
+            margin-bottom: 1rem;
+        }
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #5b7193;
+        }
+        .single-button {
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="ranked-container">
+        <header>
+            <div class="header-left">
+                <button class="back-btn" onclick="window.location.href='index.html'">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h1>⚔️ Ranked Mode</h1>
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="eloDisplay">0</div>
+                    <div class="stat-label">ELO</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="timerDisplay">00:00</div>
+                    <div class="stat-label">time</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="checksUsed">0</div>
+                    <div class="stat-label">checks used</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-grid">
+            <div class="problem-panel">
+                <div class="equation-display" id="equationMain"></div>
+                <div class="steps-container" id="stepsContainer"></div>
+                <div class="checks-left" id="checksMessage">Checks used: 0</div>
+                <div class="action-btns">
+                    <button class="btn btn-primary" id="submitBtn">📤 Submit Answers</button>
+                    <button class="btn btn-secondary" id="newProblemBtn">↻ New Problem</button>
+                </div>
+            </div>
+            <div class="coach-panel">
+                <div class="coach-header">
+                    <div class="coach-avatar" id="coachAvatar">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&hair=long&accessories=round&backgroundColor=b6e3f4,ffd5dc,ffdfbf" alt="Coach">
+                    </div>
+                    <div class="coach-info">
+                        <h2 id="coachName">Maya</h2>
+                        <p>your ranked coach</p>
+                    </div>
+                </div>
+                <div class="chat-bubble">
+                    <span class="sender" id="coachSender">Maya</span>
+                    <p id="coachMessage">Solve the simultaneous equations. Time bonus available!</p>
+                </div>
+            </div>
+        </div>
+        <footer>⚡ Base 50 ELO -10 per check + time bonus (under 45s: +40, under 90s: +15, under 195s: +5)</footer>
+    </div>
+
+    <!-- RESULT MODAL (submit popup) -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal-content">
+            <h2 id="popupTitle">🎉 Great Job!</h2>
+            <p id="popupMessage">You solved it correctly!</p>
+            <div id="popupDetails" style="margin: 1rem 0;"></div>
+            <div class="modal-actions">
+                <button id="modalContinue" class="secondary">Continue</button>
+                <button id="modalNew">New Problem</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHEATING DETECTION MODAL (popup + forced home screen) -->
+    <div class="modal-overlay" id="cheatModal">
+        <div class="modal-content">
+            <h2>⚠️ CHEATING DETECTED</h2>
+            <p id="cheatMessage">Integrity violation: tab switching / inactivity detected.</p>
+            <div class="modal-actions single-button">
+                <button id="cheatHomeBtn">🏠 RETURN TO HOME SCREEN</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="celebration-overlay" id="celebrationOverlay" style="display: none;"></div>
+    <script src="user.js"></script>
+<script>
+(function() {
+    const STORAGE_KEY = 'equa_user_config';
+    let userConfig = null;
+    let userName = 'there';
+    let coach = { name: 'Maya', imageUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&hair=long&accessories=round&backgroundColor=b6e3f4,ffd5dc,ffdfbf' };
+    let currentElo = 0;
+
+    const AWAY_THRESHOLD = 5;
+    let lastHiddenTime = null;
+    let offenceCount = 0;
+    let isRestricted = false;
+    let isFlagged = false;
+    let cheatModalActive = false;
+
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            userConfig = JSON.parse(saved);
+            userName = userConfig.userName || 'there';
+            if (userConfig.coach) coach = userConfig.coach;
+            if (userConfig.stats && typeof userConfig.stats.elo === 'number') currentElo = userConfig.stats.elo;
+            else currentElo = 0;
+            if (userConfig.stats) {
+                offenceCount = userConfig.stats.offences || 0;
+                isRestricted = userConfig.stats.restricted || false;
+                isFlagged = userConfig.stats.flagged || false;
+            }
+        } else {
+            userConfig = {
+                userName: 'Guest',
+                coach: coach,
+                stats: { elo: 0, totalGames: 0, totalWins: 0, totalTimeBonus: 0, fastestTime: Infinity, totalChecksUsed: 0, totalTimeSpent: 0, offences: 0, restricted: false, flagged: false }
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(userConfig));
+        }
+    } catch (e) { console.error('Failed to load user config', e); }
+
+    const ADMIN_PASSWORD = 'xxx';
+    document.getElementById('coachAvatar').innerHTML = `<img src="${coach.imageUrl}" alt="${coach.name}">`;
+    document.getElementById('coachName').textContent = coach.name;
+    document.getElementById('coachSender').textContent = coach.name;
+    const coachMsg = document.getElementById('coachMessage');
+    function setCoachMessage(text) { coachMsg.textContent = text; }
+
+    let currentProblem = null;
+    let checksUsed = 0;
+    let aisev_check = false;
+    let timerInterval = null;
+    let startTime = null;
+    let timerRunning = false;
+    let submitted = false;
+    const BASE_ELO = 50;
+    const PENALTY_PER_CHECK = 10;
+
+    const equationMain = document.getElementById('equationMain');
+    const stepsContainer = document.getElementById('stepsContainer');
+    const submitBtn = document.getElementById('submitBtn');
+    const newBtn = document.getElementById('newProblemBtn');
+    const checksUsedSpan = document.getElementById('checksUsed');
+    const checksMessage = document.getElementById('checksMessage');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const eloDisplay = document.getElementById('eloDisplay');
+    const resultModal = document.getElementById('resultModal');
+    const cheatModal = document.getElementById('cheatModal');
+    const cheatMessageSpan = document.getElementById('cheatMessage');
+    const cheatHomeBtn = document.getElementById('cheatHomeBtn');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupMessage = document.getElementById('popupMessage');
+    const popupDetails = document.getElementById('popupDetails');
+    const modalContinue = document.getElementById('modalContinue');
+    const modalNew = document.getElementById('modalNew');
+
+    eloDisplay.textContent = currentElo;
+
+    function disableGameplay() {
+        submitBtn.disabled = true;
+        newBtn.disabled = true;
+        document.querySelectorAll('.blank-input, .check-step-btn').forEach(el => el.disabled = true);
+    }
+
+    function enableGameplay() {
+        if (isRestricted) return;
+        submitBtn.disabled = false;
+        newBtn.disabled = false;
+        document.querySelectorAll('.blank-input, .check-step-btn').forEach(el => el.disabled = false);
+    }
+
+    function stopTimerAndBlock() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerRunning = false;
+        }
+    }
+
+    function showCheatingModal(message) {
+        if (cheatModalActive) return;
+        cheatModalActive = true;
+        stopTimerAndBlock();
+        disableGameplay();
+        cheatMessageSpan.textContent = message + " You will now be redirected to the home screen.";
+        cheatModal.style.display = 'flex';
+        if (resultModal.style.display === 'flex') resultModal.style.display = 'none';
+    }
+
+    cheatHomeBtn.onclick = () => {
+        window.location.href = 'index.html';
+    };
+
+    function saveIntegrityState() {
+        if (userConfig) {
+            if (!userConfig.stats) userConfig.stats = {};
+            userConfig.stats.offences = offenceCount;
+            userConfig.stats.restricted = isRestricted;
+            userConfig.stats.flagged = isFlagged;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(userConfig));
+        }
+    }
+
+    function applyOffencePenalty() {
+        if (isRestricted) return;
+        let message = '';
+        if (offenceCount === 1) {
+            message = `⚠️ First offence warning, Stay on task, ${userName}. Next time you'll loose elo.`;
+        } else if (offenceCount === 2) {
+            currentElo = Math.max(0, currentElo - 50);
+            message = `⚠️ Second offence. -50 ELO penalty. New ELO: ${currentElo} Next time I'll have to flag your account.`;
+        } else if (offenceCount === 3) {
+            currentElo = Math.max(0, currentElo - 100);
+            isFlagged = true;
+            message = `🚨 Third offence. -100 ELO and session flagged I tried to warn you. Admin notified. New ELO: ${currentElo}`;
+        } else if (offenceCount >= 4) {
+            isRestricted = true;
+            message = `🔒 Account restricted due to repeated violations. Contact your lecturer to unlock.`;
+            disableGameplay();
+        }
+        eloDisplay.textContent = currentElo;
+        if (userConfig.stats) userConfig.stats.elo = currentElo;
+        saveIntegrityState();
+        setCoachMessage(message);
+        let offenceType = offenceCount === 1 ? "First warning" : (offenceCount === 2 ? "Second violation" : "Severe integrity breach");
+        let cheatMsg = `🚨 CHEATING DETECTED: (${offenceType}). ${message}`;
+        showCheatingModal(cheatMsg);
+    }
+
+    function handleTabSwitchAway() {
+        if (isRestricted) return;
+        if (document.hidden) {
+            lastHiddenTime = Date.now();
+        } else {
+            if (lastHiddenTime) {
+                const awaySeconds = (Date.now() - lastHiddenTime) / 1000;
+                if (awaySeconds >= AWAY_THRESHOLD) {
+                    offenceCount++;
+                    applyOffencePenalty();
+                }
+                lastHiddenTime = null;
+            }
+        }
+    }
+
+    document.addEventListener('visibilitychange', handleTabSwitchAway);
+
+    window.adminUnlock = function() {
+        const pwd = prompt('Enter admin password to reset integrity status:');
+        if (pwd === ADMIN_PASSWORD) {
+            offenceCount = 0;
+            isRestricted = false;
+            isFlagged = false;
+            cheatModalActive = false;
+            saveIntegrityState();
+            if (cheatModal.style.display === 'flex') cheatModal.style.display = 'none';
+            enableGameplay();
+            setCoachMessage('✅ Integrity status reset. You can now play ranked mode.');
+            eloDisplay.textContent = currentElo;
+            loadNewProblem();
+        } else {
+            alert('Incorrect password. Sending admin report.');
+        }
+    };
+
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && e.key === 'U') {
+            e.preventDefault();
+            window.adminUnlock();
+        }
+    });
+
+    if (isRestricted) {
+        disableGameplay();
+        setCoachMessage('🔒 Ranked mode is locked. Contact your lecturer to unlock.');
+    }
+
+    function getTimeBonus(seconds) {
+        if (seconds < 45) return 40;
+        if (seconds < 90) return 15;
+        if (seconds < 195) return 5;
+        return 0;
+    }
+
+    function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    function startTimer() {
+        if (timerRunning || isRestricted || cheatModalActive) return;
+        startTime = Date.now();
+        timerRunning = true;
+        timerInterval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            timerDisplay.textContent = formatTime(elapsed);
+            if (elapsed >= 300) {
+                stopTimer();
+                submitBtn.disabled = true;
+                setCoachMessage(`⏰ Time's up, ${userName}. Start a new problem.`);
+            }
+        }, 200);
+    }
+    
+    function stopTimer() {
+        clearInterval(timerInterval);
+        timerRunning = false;
+    }
+    
+    function resetTimer() {
+        stopTimer();
+        timerDisplay.textContent = '00:00';
+        if (!isRestricted && !cheatModalActive) startTimer();
+    }
+
+    function gcd(a, b) { return b === 0 ? a : gcd(b, a % b); }
+
+    function generateSimultaneousProblem() {
+        let x, y;
+        do {
+            x = Math.floor(Math.random() * 17) - 8;
+            y = Math.floor(Math.random() * 17) - 8;
+        } while (x === 0 || y === 0);
+        
+        let a, b, d, e;
+        const problemType = Math.floor(Math.random() * 3);
+        switch(problemType) {
+            case 0:
+                a = Math.floor(Math.random() * 4) + 2;
+                b = Math.floor(Math.random() * 4) + 2;
+                d = a;
+                e = Math.floor(Math.random() * 4) + 2;
+                while (e === b) e = Math.floor(Math.random() * 4) + 2;
+                break;
+            case 1:
+                a = Math.floor(Math.random() * 4) + 2;
+                b = Math.floor(Math.random() * 4) + 2;
+                d = Math.floor(Math.random() * 4) + 2;
+                while (d === a) d = Math.floor(Math.random() * 4) + 2;
+                e = Math.floor(Math.random() * 4) + 2;
+                break;
+            default:
+                a = Math.floor(Math.random() * 3) + 2;
+                b = Math.floor(Math.random() * 3) + 3;
+                d = Math.floor(Math.random() * 3) + 2;
+                e = Math.floor(Math.random() * 3) + 3;
+                break;
+        }
+        
+        let c1 = a * x + b * y;
+        let c2 = d * x + e * y;
+        
+        if (Math.random() > 0.5) { a = -a; b = -b; c1 = a * x + b * y; }
+        if (Math.random() > 0.5) { d = -d; e = -e; c2 = d * x + e * y; }
+        
+        const eq1 = `${a}x ${b >= 0 ? '+' : '-'} ${Math.abs(b)}y = ${c1}`;
+        const eq2 = `${d}x ${e >= 0 ? '+' : '-'} ${Math.abs(e)}y = ${c2}`;
+        
+        let step1Text = `Step 1: Solve for y using elimination (multiply if needed). Then y = ?`;
+        let step2Text = `Step 2: Substitute y back to find x. x = ?`;
+        
+        return {
+            equation: `${eq1} ,   ${eq2}`,
+            steps: [
+                { text: step1Text, answer: y },
+                { text: step2Text, answer: x }
+            ],
+            solutions: { x, y }
+        };
+    }
+
+    function renderProblem(prob) {
+        equationMain.textContent = prob.equation;
+        let html = '';
+        prob.steps.forEach((step, index) => {
+            html += `
+                <div class="step-row" data-step="${index}">
+                    <span class="step-text">${step.text}</span>
+                    <input type="number" class="blank-input" id="step${index}" placeholder="?" step="1">
+                    <button class="check-step-btn" id="check${index}" ${submitted || isRestricted || cheatModalActive ? 'disabled' : ''}>✔ Check</button>
+                    <span class="step-feedback" id="fb${index}"></span>
+                </div>
+            `;
+        });
+        stepsContainer.innerHTML = html;
+
+        prob.steps.forEach((_, index) => {
+            const checkBtn = document.getElementById(`check${index}`);
+            const input = document.getElementById(`step${index}`);
+            const fb = document.getElementById(`fb${index}`);
+
+            checkBtn.addEventListener('click', () => {
+                if (submitted || isRestricted || cheatModalActive) return;
+                const val = parseFloat(input.value);
+                if (isNaN(val)) {
+                    fb.textContent = '❌';
+                    return;
+                }
+                const correct = prob.steps[index].answer;
+                if (val === correct) {
+                    fb.textContent = '✅';
+                    setCoachMessage(`Step ${index+1} correct, ${userName}!`);
+                } else {
+                    fb.textContent = '❌';
+                    setCoachMessage(`Step ${index+1} wrong. Keep trying.`);
+                }
+                if (!aisev_check) {
+                    checksUsed++;
+                    updateChecksDisplay();
+                }
+            });
+        });
+    }
+
+    function updateChecksDisplay() {
+        checksUsedSpan.textContent = checksUsed;
+        checksMessage.textContent = `Checks used: ${checksUsed}`;
+    }
+
+    function submitAll() {
+        if (submitted || isRestricted || cheatModalActive) return;
+        
+        const inputs = document.querySelectorAll('.blank-input');
+        let emptyFound = false;
+        inputs.forEach(input => { if (input.value.trim() === '') emptyFound = true; });
+        if (emptyFound) {
+            setCoachMessage(`You gotta answer all steps before submitting, ${userName}.`);
+            return;
+        }
+
+        submitted = true;
+        stopTimer();
+
+        const steps = currentProblem.steps;
+        let correctCount = 0;
+        let resultsHtml = '';
+        steps.forEach((step, index) => {
+            const input = document.getElementById(`step${index}`);
+            const fb = document.getElementById(`fb${index}`);
+            const val = parseFloat(input.value);
+            const isCorrect = (!isNaN(val) && val === step.answer);
+            if (isCorrect) correctCount++;
+            fb.textContent = isCorrect ? '✅' : `❌ (should be ${step.answer})`;
+            resultsHtml += `<div>Step ${index+1}: ${isCorrect ? '✓' : '✗'} ${isCorrect ? '' : `(correct: ${step.answer})`}</div>`;
+        });
+
+        const elapsed = Math.floor((Date.now() - startTime) / 1000);
+        let baseGain = 0;
+        let timeBonus = 0;
+        let totalGain = 0;
+        let message = '';
+        let isWin = (correctCount === steps.length);
+
+        if (isWin) {
+            baseGain = BASE_ELO - (aisev_check ? 0 : checksUsed * PENALTY_PER_CHECK);
+            if (baseGain < 0) baseGain = 0;
+            timeBonus = getTimeBonus(elapsed);
+            totalGain = baseGain + timeBonus;
+            currentElo += totalGain;
+            message = `Correct! +${totalGain} ELO (base ${baseGain} + time ${timeBonus})`;
+            popupTitle.innerHTML = '🎉 Victory!';
+            celebrate();
+        } else {
+            let penalty = (correctCount === 0) ? 50 : 35;
+            currentElo = Math.max(0, currentElo - penalty);
+            message = `${correctCount === 0 ? 'All steps wrong' : 'Some steps wrong'}. -${penalty} ELO. New ELO: ${currentElo}`;
+            popupTitle.innerHTML = '😓 Not quite...';
+        }
+
+        if (userConfig) {
+            if (!userConfig.stats) userConfig.stats = {};
+            const stats = userConfig.stats;
+            stats.elo = currentElo;
+            stats.totalGames = (stats.totalGames || 0) + 1;
+            if (isWin) stats.totalWins = (stats.totalWins || 0) + 1;
+            stats.totalTimeBonus = (stats.totalTimeBonus || 0) + timeBonus;
+            stats.totalChecksUsed = (stats.totalChecksUsed || 0) + checksUsed;
+            if (isWin && elapsed < (stats.fastestTime || Infinity)) stats.fastestTime = elapsed;
+            stats.totalTimeSpent = (stats.totalTimeSpent || 0) + elapsed;
+            stats.offences = offenceCount;
+            stats.restricted = isRestricted;
+            stats.flagged = isFlagged;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(userConfig));
+        }
+        eloDisplay.textContent = currentElo;
+
+        popupMessage.textContent = message;
+        popupDetails.innerHTML = resultsHtml + `<br>⏱️ Time: ${formatTime(elapsed)} | Solutions: x = ${currentProblem.solutions.x}, y = ${currentProblem.solutions.y}<br>✨ New ELO: ${currentElo}`;
+        resultModal.style.display = 'flex';
+
+        document.querySelectorAll('.blank-input, .check-step-btn').forEach(el => el.disabled = true);
+        submitBtn.disabled = true;
+    }
+
+    function celebrate() {
+        const overlay = document.getElementById('celebrationOverlay');
+        overlay.style.display = 'block';
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            confetti.style.animationDelay = Math.random() * 0.5 + 's';
+            overlay.appendChild(confetti);
+        }
+        const check = document.createElement('div');
+        check.className = 'checkmark-burst';
+        check.innerHTML = '✓';
+        overlay.appendChild(check);
+        setTimeout(() => {
+            overlay.innerHTML = '';
+            overlay.style.display = 'none';
+        }, 3000);
+    }
+
+    function loadNewProblem() {
+        if (isRestricted || cheatModalActive) {
+            if (isRestricted) setCoachMessage('🔒 Ranked locked. Use admin unlock (Ctrl+Shift+U).');
+            return;
+        }
+        currentProblem = generateSimultaneousProblem();
+        renderProblem(currentProblem);
+        checksUsed = 0;
+        submitted = false;
+        updateChecksDisplay();
+        resetTimer();
+        submitBtn.disabled = false;
+        setCoachMessage(`New problem, ${userName}. Solve for x and y!`);
+        resultModal.style.display = 'none';
+    }
+
+    submitBtn.addEventListener('click', submitAll);
+    newBtn.addEventListener('click', loadNewProblem);
+
+    modalContinue.addEventListener('click', () => {
+        resultModal.style.display = 'none';
+    });
+    modalNew.addEventListener('click', () => {
+        resultModal.style.display = 'none';
+        loadNewProblem();
+    });
+
+    window.linx_start = function() {
+        aisev_check = true;
+        if (currentProblem && currentProblem.steps) {
+            currentProblem.steps.forEach((step, idx) => {
+                const input = document.getElementById(`step${idx}`);
+                if (input) input.value = step.answer;
+            });
+        }
+    };
+
+    loadNewProblem();
+    window.addEventListener('beforeunload', () => stopTimer());
+})();
+</script>
+</body>
+</html>

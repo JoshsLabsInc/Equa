@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Equa · practice mode (mobile)</title>
+    <link rel="shortcut icon" type="image/x-icon" href="tablogo.png"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #edf2fa, #dfe8f2);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .practice-container {
+            max-width: 100%;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(16px);
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px #1b2f4d60;
+            padding: 1.5rem;
+            border: 1px solid #ffffff99;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .logo-area h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #11314e, #25487a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .coach-badge {
+            background: #fbe9d2;
+            color: #9b6b3e;
+            padding: 0.3rem 0.8rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            border: 1px solid #ffdec2;
+        }
+        .main-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        /* left side – workspace */
+        .workspace, .coach-panel {
+            width: 100%;
+        }
+        .equation-panel {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.2rem;
+            box-shadow: 0 20px 30px -12px #1f3a6030;
+        }
+        .section-label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #34517e;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .equation {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            background: #f5f9ff;
+            padding: 0.8rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            color: #0f2642;
+            border: 2px solid #c9daf5;
+            margin-bottom: 1.5rem;
+            word-break: break-word;
+        }
+        .step-hint-box {
+            background: #ecf3fe;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 6px solid #5377b0;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        .step-hint-box i {
+            color: #2c4b80;
+            margin-right: 0.5rem;
+        }
+        .answer-area {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        #answer {
+            flex: 1;
+            padding: 0.9rem;
+            font-size: 1.2rem;
+            border: 2px solid #d0ddef;
+            border-radius: 60px;
+            outline: none;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+        .action-btns {
+            display: flex;
+            gap: 0.8rem;
+        }
+        .btn {
+            flex: 1;
+            background: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: 1px solid #c2d3ec;
+            transition: 0.15s;
+            color: #1d3453;
+        }
+        .btn-primary {
+            background: #1e2f4a;
+            color: white;
+            border: none;
+            box-shadow: 0 8px 16px -6px #162b44;
+        }
+        .btn-primary:hover { background: #2b4062; }
+        .btn-secondary:hover { background: #e5eefd; }
+        .progress-track {
+            margin-top: 1.2rem;
+            background: #ffffffc0;
+            border-radius: 60px;
+            padding: 0.7rem 1rem;
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #14273e;
+        }
+        /* right side – coach panel */
+        .coach-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .maya-card {
+            background: #fefefeec;
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 1.2rem;
+            border: 1px solid rgba(255,255,255,0.9);
+            box-shadow: 0 16px 28px -12px #1f385b50;
+        }
+        .maya-header {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .maya-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 30px;
+            overflow: hidden;
+            background: #ffe8cf;
+            border: 2px solid white;
+            box-shadow: 0 4px 8px -4px #0f2642;
+        }
+        .maya-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .maya-name h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #11355e;
+            line-height: 1.2;
+        }
+        .maya-name span {
+            font-size: 0.8rem;
+            color: #4b6a93;
+        }
+        .insight-bubble {
+            background: #e7f0fe;
+            border-radius: 1.5rem 1.5rem 1.5rem 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid white;
+        }
+        .insight-bubble p {
+            font-size: 0.95rem;
+            color: #1d375c;
+            margin-bottom: 0.8rem;
+        }
+        .thought-steps {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1rem;
+            list-style-type: none;
+            border-left: 4px solid #ffb26e;
+            font-size: 0.85rem;
+        }
+        .thought-steps li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: baseline;
+            color: #1a2d4e;
+        }
+        .thought-steps i {
+            color: #ea9c4b;
+            width: 18px;
+            font-size: 0.9rem;
+        }
+        .chat-area {
+            background: #f6faffec;
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 1.2rem;
+        }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+        .chat-messages {
+            background: #ffffffdd;
+            border-radius: 1.5rem;
+            padding: 0.8rem;
+            min-height: 120px;
+            max-height: 180px;
+            overflow-y: auto;
+            margin-bottom: 0.8rem;
+            border: 1px solid #cddff5;
+        }
+        .chat-messages div {
+            margin-bottom: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            background: #f3f7ff;
+            border-radius: 30px;
+            width: fit-content;
+            max-width: 90%;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 5px #c1d2ec50;
+        }
+        .chat-messages .ai-message {
+            background: #1e2f4a;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+        #chat-input {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #c4d3ea;
+            outline: none;
+            font-size: 0.9rem;
+        }
+        .icon-btn {
+            background: #1e2f4a;
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px -2px #1e2f4a80;
+        }
+        .hint-shortcut {
+            background: #ecdbbd;
+            color: #604020;
+            width: auto;
+            padding: 0.6rem 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: none;
+            border: 1px solid #cdaf83;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #58749e;
+            font-size: 0.8rem;
+        }
+        .incorrect-feedback {
+            background: #ffecf0;
+            color: #b13e5c;
+            padding: 0.6rem 1rem;
+            border-radius: 60px;
+            border: 1px solid #fcc1cf;
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
+        }
+        .reset-small {
+            background: transparent;
+            border: none;
+            color: #5172a5;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: underline dotted;
+            font-size: 0.85rem;
+        }
+        /* large touch targets */
+        button, .btn, .icon-btn, .reset-small {
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+        @media (min-width: 768px) {
+            body { padding: 1.5rem; }
+            .practice-container { max-width: 1200px; margin: 0 auto; }
+            .main-grid {
+                display: grid;
+                grid-template-columns: 1.6fr 1fr;
+                gap: 2rem;
+            }
+            .workspace { padding: 0; }
+            .equation { font-size: 3rem; }
+            .step-hint-box { font-size: 1rem; }
+            #answer { font-size: 1.5rem; }
+            .btn { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="practice-container">
+    <header>
+        <div class="logo-area">
+            <h1>🧮 Equa · practice</h1>
+            <span class="coach-badge" id="coachBadge"><i class="fas fa-comment-dots"></i> <span id="badgeCoachName">Maya</span></span>
+        </div>
+        <div class="streak-control">
+            <span style="font-weight:600;">🔥 streak <span id="streak">0</span></span>
+            <button id="resetPractice" class="reset-small" title="reset streak & start fresh">↻ reset</button>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <!-- left side: interactive workspace -->
+        <div class="workspace">
+            <div class="equation-panel">
+                <div class="section-label"><i class="fas fa-puzzle-piece"></i> solve step by step</div>
+                <div id="problem" class="equation">3x + 5 = 20</div>
+
+                <div id="stepHint" class="step-hint-box">
+                    <i class="fas fa-lightbulb"></i> 
+                    <span id="hintText">First, isolate the term with x. Subtract 5 from both sides.</span>
+                </div>
+
+                <div class="answer-area">
+                    <input type="text" id="answer" placeholder="your answer for x" autocomplete="off">
+                </div>
+                <div class="action-btns">
+                    <button class="btn btn-primary" id="submit"><i class="fas fa-check"></i> submit</button>
+                    <button class="btn btn-secondary" id="new-problem"><i class="fas fa-shuffle"></i> new</button>
+                </div>
+
+                <div id="wrongFeedback" class="incorrect-feedback" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i> 
+                    <span id="wrongMessage"></span>
+                </div>
+
+                <div class="progress-track">
+                    <span><i class="far fa-clock"></i> attempts: <span id="attemptCount">0</span></span>
+                    <span><i class="fas fa-check-circle" style="color:#2f7540;"></i> correct: <span id="correctCount">0</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- right side: personalized coach -->
+        <div class="coach-panel">
+            <div class="maya-card">
+                <div class="maya-header">
+                    <div class="maya-avatar" id="coachAvatarContainer">
+                        <img id="coachAvatarImg" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&hair=long&accessories=round&backgroundColor=b6e3f4,ffd5dc,ffdfbf" alt="Coach">
+                    </div>
+                    <div class="maya-name">
+                        <h2 id="coachNameDisplay">Maya</h2>
+                        <span id="coachTitle">your personal coach</span>
+                    </div>
+                </div>
+                <div class="insight-bubble" id="insightBubble">
+                    <p>💬 <span id="coachInsight">I’ll watch your steps and guide you. Try the problem!</span></p>
+                    <ul class="thought-steps" id="thoughtSteps">
+                        <li><i class="fas fa-arrow-right"></i> isolate the x‑term</li>
+                        <li><i class="fas fa-arrow-right"></i> undo addition/subtraction</li>
+                        <li><i class="fas fa-arrow-right"></i> divide by coefficient</li>
+                    </ul>
+                </div>
+                <button class="btn hint-shortcut" id="coachHintBtn"><i class="fas fa-life-ring"></i> ask <span id="hintBtnCoachName">Maya</span> for a hint</button>
+            </div>
+
+            <!-- chat with coach -->
+            <div class="chat-area">
+                <div class="chat-header">
+                    <i class="fas fa-comment" style="color:#2a4a7a;"></i>
+                    <h4>chat with <span id="chatCoachName">Maya</span></h4>
+                </div>
+                <div id="chat-messages" class="chat-messages">
+                    <div>👋 Hi, I'm your coach. I'll help you reason through each step.</div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="chat-input" placeholder="ask me about the step...">
+                    <button class="icon-btn" id="chat-send"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>⏳ practice mode · no timer · feedback based on your thinking</footer>
+</div>
+
+<script>
+    (function() {
+        const STORAGE_KEY = 'equa_user_config';
+        let userConfig = null;
+        let userName = 'there';
+
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                userConfig = JSON.parse(saved);
+                userName = userConfig.userName || 'there';
+            } else {
+                window.location.href = 'index.html';
+                return;
+            }
+        } catch (e) {
+            console.error('Failed to load user config', e);
+            window.location.href = 'index.html';
+            return;
+        }
+
+        if (userConfig && userConfig.coach) {
+            const coach = userConfig.coach;
+            const coachName = coach.name;
+            document.getElementById('badgeCoachName').textContent = coachName;
+            if (coach.imageUrl) {
+                document.getElementById('coachAvatarImg').src = coach.imageUrl;
+                document.getElementById('coachAvatarImg').alt = coachName;
+            }
+            document.getElementById('coachNameDisplay').textContent = coachName;
+            document.getElementById('hintBtnCoachName').textContent = coachName;
+            document.getElementById('chatCoachName').textContent = coachName;
+        }
+
+        let currentProblem = { text: '3x + 5 = 20', answer: 5 };
+        let streak = 0;
+        let attemptCounter = 0;
+        let correctCounter = 0;
+        let lastAnswerWrong = false;
+        let currentHintLevel = 0;
+        let userEquationHistory = [];
+
+        const problemEl = document.getElementById('problem');
+        const answerInput = document.getElementById('answer');
+        const submitBtn = document.getElementById('submit');
+        const newBtn = document.getElementById('new-problem');
+        const streakSpan = document.getElementById('streak');
+        const attemptSpan = document.getElementById('attemptCount');
+        const correctSpan = document.getElementById('correctCount');
+        const wrongFeedback = document.getElementById('wrongFeedback');
+        const wrongMsg = document.getElementById('wrongMessage');
+        const hintTextSpan = document.getElementById('hintText');
+        const coachInsight = document.getElementById('coachInsight');
+        const thoughtSteps = document.getElementById('thoughtSteps');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        const coachHintBtn = document.getElementById('coachHintBtn');
+        const resetBtn = document.getElementById('resetPractice');
+
+        function parseEquation(equation) {
+            const clean = equation.replace(/\s+/g, '');
+            const match = clean.match(/^([+-]?\d*)x([+-]\d+)?=([+-]?\d+)$/);
+            if (!match) return null;
+            let coeff = match[1];
+            let constPart = match[2];
+            let rhs = match[3];
+            let a = coeff === '' ? 1 : (coeff === '+' ? 1 : (coeff === '-' ? -1 : parseInt(coeff)));
+            let b = constPart ? parseInt(constPart) : 0;
+            let c = parseInt(rhs);
+            return { a, b, c };
+        }
+
+        function updateHintAndInsight() {
+            const prob = currentProblem.text;
+            const parsed = parseEquation(prob);
+            if (!parsed) {
+                hintTextSpan.innerText = 'isolate the variable step by step.';
+                coachInsight.innerText = `This equation looks a bit different, ${userName}. Want to try another?`;
+                return;
+            }
+            const { a, b, c } = parsed;
+            let operation = '';
+            if (b !== 0) {
+                operation = `Undo the constant ${b > 0 ? '+' + b : b} by subtracting ${Math.abs(b)} from both sides.`;
+            } else {
+                operation = `Divide both sides by ${a} to get x.`;
+            }
+            if (lastAnswerWrong || currentHintLevel > 0) {
+                if (b !== 0) {
+                    const newRhs = c - b;
+                    hintTextSpan.innerText = `Step: ${a}x ${b >=0 ? '+' + b : b} = ${c}  →  subtract ${Math.abs(b)}: ${a}x = ${newRhs}. Then divide by ${a}.`;
+                } else {
+                    hintTextSpan.innerText = `Step: ${a}x = ${c}  →  divide both sides by ${a}: x = ${c}/${a} = ${(c/a).toFixed(2)}.`;
+                }
+                if (lastAnswerWrong) {
+                    coachInsight.innerText = `Remember, ${userName}: whatever you do to one side, do to the other. Try the first step: ${operation}`;
+                } else {
+                    coachInsight.innerText = `Good progress, ${userName}! Next: ${operation}`;
+                }
+            } else {
+                hintTextSpan.innerText = `💡 ${operation} Then isolate x.`;
+                coachInsight.innerText = `I'll help you break it down, ${userName}. Start by moving the constant term.`;
+            }
+            let stepsHtml = '';
+            if (b !== 0) {
+                stepsHtml = `<li><i class="fas fa-arrow-right"></i> ${b > 0 ? 'subtract' : 'add'} ${Math.abs(b)} both sides → ${a}x = ${c - b}</li>`;
+                stepsHtml += `<li><i class="fas fa-arrow-right"></i> divide by ${a} → x = ${(c - b)} / ${a}</li>`;
+            } else {
+                stepsHtml = `<li><i class="fas fa-arrow-right"></i> divide by ${a} → x = ${c} / ${a}</li>`;
+            }
+            thoughtSteps.innerHTML = stepsHtml;
+        }
+
+        function generateRandomProblem() {
+            const a = Math.floor(Math.random() * 4) + 1;
+            const x = Math.floor(Math.random() * 9) - 4;
+            const b = Math.floor(Math.random() * 11) - 5;
+            const c = a * x + b;
+            return {
+                text: `${a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)} = ${c}`,
+                answer: x
+            };
+        }
+
+        function setProblem(prob) {
+            currentProblem = prob;
+            problemEl.innerText = prob.text;
+            answerInput.value = '';
+            wrongFeedback.style.display = 'none';
+            lastAnswerWrong = false;
+            currentHintLevel = 0;
+            updateHintAndInsight();
+            addChatMessage(`📝 New problem, ${userName}: ${prob.text}`, false);
+        }
+
+        function addChatMessage(text, isUser = false) {
+            const msgDiv = document.createElement('div');
+            msgDiv.innerText = text;
+            if (!isUser) msgDiv.classList.add('ai-message');
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function analyzeMistake(userAnswer, correctAnswer, problemText) {
+            const parsed = parseEquation(problemText);
+            if (!parsed) return `Let's check the equation format, ${userName}. Want a hint?`;
+            const { a, b, c } = parsed;
+            if (userAnswer === (c - b)) {
+                return `${userName}, you stopped after isolating the term: ${a}x = ${c - b}. Now you need to divide by ${a} to get x.`;
+            } else if (userAnswer === (c / a)) {
+                return `${userName}, you may have forgotten to move the constant ${b}. First, subtract ${b} from both sides.`;
+            } else if (userAnswer === (c - b) / (a * 2)) {
+                return `${userName}, double-check your division. You have to divide the whole right side by ${a}.`;
+            } else {
+                const correct = (c - b) / a;
+                return `${userName}, the correct answer is x = ${correct}. Follow the steps: move constant, then divide.`;
+            }
+        }
+
+        function handleCorrect() {
+            streak++;
+            correctCounter++;
+            attemptCounter++;
+            updateCounters();
+            wrongFeedback.style.display = 'none';
+            addChatMessage(`✅ Correct, ${userName}! Great step-by-step work.`, false);
+            coachInsight.innerText = `Excellent, ${userName}! You nailed it.`;
+            lastAnswerWrong = false;
+            if (streak % 3 === 0) {
+                addChatMessage(`🔥 ${streak} streak, ${userName}! You're mastering this.`, false);
+            }
+            setTimeout(() => {
+                const newProb = generateRandomProblem();
+                setProblem(newProb);
+            }, 1000);
+        }
+
+        function handleIncorrect() {
+            const userAns = parseFloat(answerInput.value.trim());
+            if (isNaN(userAns)) {
+                wrongMsg.innerText = `Please enter a number, ${userName}.`;
+                wrongFeedback.style.display = 'block';
+                return;
+            }
+            streak = 0;
+            attemptCounter++;
+            lastAnswerWrong = true;
+            currentHintLevel = 1;
+            updateCounters();
+            const analysis = analyzeMistake(userAns, currentProblem.answer, currentProblem.text);
+            wrongMsg.innerText = analysis;
+            wrongFeedback.style.display = 'block';
+            coachInsight.innerText = analysis;
+            addChatMessage(`🤔 ${analysis}`, false);
+            updateHintAndInsight();
+            userEquationHistory.push(userAns);
+        }
+
+        function updateCounters() {
+            streakSpan.innerText = streak;
+            attemptSpan.innerText = attemptCounter;
+            correctSpan.innerText = correctCounter;
+        }
+
+        submitBtn.addEventListener('click', () => {
+            const userAns = parseFloat(answerInput.value.trim());
+            if (isNaN(userAns)) {
+                wrongMsg.innerText = `Please type a number, ${userName}.`;
+                wrongFeedback.style.display = 'block';
+                return;
+            }
+            if (userAns === currentProblem.answer) {
+                handleCorrect();
+            } else {
+                handleIncorrect();
+            }
+        });
+
+        newBtn.addEventListener('click', () => {
+            const newProb = generateRandomProblem();
+            setProblem(newProb);
+            wrongFeedback.style.display = 'none';
+            lastAnswerWrong = false;
+            currentHintLevel = 0;
+            updateHintAndInsight();
+            addChatMessage(`🔄 New problem generated, ${userName}. You've got this.`, false);
+        });
+
+        coachHintBtn.addEventListener('click', () => {
+            currentHintLevel = 1;
+            updateHintAndInsight();
+            const parsed = parseEquation(currentProblem.text);
+            if (parsed) {
+                const { a, b, c } = parsed;
+                let hintMsg = `First ${b !== 0 ? 'remove constant ' + b : 'divide by ' + a}.`;
+                addChatMessage(`💡 Hint: ${hintMsg}`, false);
+            } else {
+                addChatMessage(`💡 Try isolating x using inverse operations, ${userName}.`, false);
+            }
+        });
+
+        chatSend.addEventListener('click', () => {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            addChatMessage('🧑 ' + text, true);
+            chatInput.value = '';
+            setTimeout(() => {
+                let reply = '';
+                const lower = text.toLowerCase();
+                if (lower.includes('step') || lower.includes('how to')) {
+                    reply = `Look at the step hint above, ${userName}. Always do the same operation on both sides.`;
+                } else if (lower.includes('wrong') || lower.includes('mistake')) {
+                    reply = `Show me your answer, ${userName}, and I’ll tell you exactly where it went wrong.`;
+                } else if (lower.includes('why')) {
+                    reply = `Because equations stay balanced only if you do the same to both sides, ${userName}.`;
+                } else if (lower.includes('thanks')) {
+                    reply = `You’re welcome, ${userName}! Keep up the focus.`;
+                } else {
+                    reply = `I’m here to guide you, ${userName}. Try the problem and I’ll give feedback.`;
+                }
+                addChatMessage(reply, false);
+            }, 300);
+        });
+
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') chatSend.click();
+        });
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') submitBtn.click();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            streak = 0;
+            attemptCounter = 0;
+            correctCounter = 0;
+            updateCounters();
+            setProblem(generateRandomProblem());
+            addChatMessage(`✨ Practice reset, ${userName}. Let’s start fresh!`, false);
+            wrongFeedback.style.display = 'none';
+            userEquationHistory = [];
+            currentHintLevel = 0;
+            coachInsight.innerText = `Fresh start, ${userName}! Follow the steps.`;
+        });
+
+        setProblem(currentProblem);
+        updateCounters();
+        chatMessages.innerHTML = '';
+        addChatMessage(`👋 Hi ${userName}! I'm ${userConfig.coach.name}. I'll help you reason through each step.`, false);
+    })();
+</script>
+</body>
+</html>

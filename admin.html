@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equa Admin Dashboard</title>
+    <link rel="shortcut icon" type="image/x-icon" href="logo.png"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="user.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #f0f4fa, #e6ecf5);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+        .container { max-width: 1700px; margin: 2px auto; }
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+        }
+        .logo-area img {
+            width: 220px;
+            object-fit: contain;
+            display: block;
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-area h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #162b4a, #2f4674);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 0.8rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+        .stat-card i { font-size: 1.5rem; color: #2b4bff; margin-bottom: 0.3rem; display: block; }
+        .stat-card .value { font-size: 1.3rem; font-weight: 700; color: #1e2f4a; }
+        .stat-card .label { font-size: 0.75rem; color: #5c6f91; }
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+            padding-bottom: 0.5rem;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #5c6f91;
+            cursor: pointer;
+            border-radius: 60px;
+            transition: all 0.2s ease;
+        }
+        .tab-btn i { margin-right: 0.5rem; }
+        .tab-btn.active {
+            background: #2b4bff;
+            color: white;
+            box-shadow: 0 8px 16px -8px #2b4bff80;
+        }
+        .tab-pane { display: none; animation: fadeIn 0.3s ease; }
+        .tab-pane.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .filter-bar {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+            background: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 60px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            align-items: center;
+        }
+        .filter-bar input, .filter-bar select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #dbe2f0;
+            border-radius: 60px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+            background: white;
+            font-size: 0.9rem;
+        }
+        .filter-bar input:focus, .filter-bar select:focus {
+            border-color: #2b4bff;
+            box-shadow: 0 0 0 3px rgba(43,75,255,0.1);
+        }
+        .filter-bar button {
+            background: #1e2f4a;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .filter-bar button:hover { background: #2b4062; }
+        .search-input {
+            flex: 1;
+            min-width: 180px;
+            position: relative;
+        }
+        .search-input i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8a9bc0;
+        }
+        .search-input input {
+            width: 100%;
+            padding-left: 2.2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+        }
+        th, td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #f0f2f5;
+            font-size: 0.9rem;
+        }
+        th { background: #f8faff; font-weight: 600; color: #1e2f4a; }
+        tr:hover { background: #fafcff; }
+        .rank-1 { background: linear-gradient(90deg, #fff9e6, #fff); border-left: 4px solid #ffd700; }
+        .rank-2 { background: linear-gradient(90deg, #f5f5f5, #fff); border-left: 4px solid #c0c0c0; }
+        .rank-3 { background: linear-gradient(90deg, #fef5e6, #fff); border-left: 4px solid #cd7f32; }
+        .medal { font-size: 1.2rem; margin-right: 0.3rem; vertical-align: middle; }
+        .ban-btn, .unban-btn {
+            padding: 0.3rem 0.8rem;
+            border-radius: 60px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.8rem;
+        }
+        .ban-btn { background: #dc3545; color: white; }
+        .ban-btn:hover { background: #c82333; }
+        .unban-btn { background: #28a745; color: white; }
+        .unban-btn:hover { background: #218838; }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.2rem;
+        }
+        .chart-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.2rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .chart-card:hover { transform: translateY(-4px); }
+        .chart-card h3 {
+            margin-bottom: 0.8rem;
+            color: #1e2f4a;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        canvas { max-height: 240px; width: 100%; }
+        .user-selector {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            background: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 60px;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .user-selector select, .user-selector input {
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            border: 1px solid #dbe2f0;
+            font-size: 0.9rem;
+        }
+        .empty-message {
+            text-align: center;
+            padding: 2rem;
+            color: #8a9bc0;
+            background: white;
+            border-radius: 20px;
+        }
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .chart-grid { grid-template-columns: 1fr; }
+            .filter-bar { flex-direction: column; align-items: stretch; }
+            .search-input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="dashboard-header">
+        <div class="logo-area">
+            <img src="logo.png" alt="Equa">
+            <h1>⚡ Admin Panel</h1>
+        </div>
+        <div class="stats-badge">
+            <i class="fas fa-chart-line"></i> Live metrics
+        </div>
+    </div>
+
+    <div class="stats-grid" id="summaryStats"></div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="leaderboard"><i class="fas fa-trophy"></i> Leaderboard</button>
+        <button class="tab-btn" data-tab="flagged"><i class="fas fa-flag"></i> Flagged Users</button>
+        <button class="tab-btn" data-tab="graphs"><i class="fas fa-chart-pie"></i> Performance Graphs</button>
+    </div>
+
+    <div id="leaderboard" class="tab-pane active">
+        <div class="filter-bar">
+            <div class="search-input">
+                <i class="fas fa-search"></i>
+                <input type="text" id="leaderboard-search" placeholder="Search by username...">
+            </div>
+            <input type="number" id="leaderboard-min-elo" placeholder="Min ELO" step="10" style="width:100px">
+            <input type="number" id="leaderboard-min-mastery" placeholder="Min Mastery" min="1" max="10" style="width:110px">
+            <select id="leaderboard-sort" style="width:130px">
+                <option value="elo">Sort by ELO</option>
+                <option value="mastery">Sort by Mastery</option>
+                <option value="winrate">Sort by Win Rate</option>
+            </select>
+            <button id="leaderboard-refresh"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <table id="leaderboard-table">
+            <thead><tr><th>Rank</th><th>Username</th><th>ELO</th><th>Mastery Level</th><th>Win Rate</th> </thead>
+            <tbody></tbody>
+         </table>
+    </div>
+
+    <div id="flagged" class="tab-pane">
+        <div class="filter-bar">
+            <div class="search-input">
+                <i class="fas fa-search"></i>
+                <input type="text" id="flag-search-username" placeholder="Search by username...">
+            </div>
+            <div class="search-input">
+                <i class="fas fa-comment"></i>
+                <input type="text" id="flag-search-reason" placeholder="Filter by reason...">
+            </div>
+            <button id="flag-refresh"><i class="fas fa-sync-alt"></i> Refresh</button>
+        </div>
+        <table id="flagged-table">
+            <thead> <tr><th>Username</th><th>Reason</th><th>Last Active</th><th>Banned?</th><th>Actions</th></tr> </thead>
+            <tbody></tbody>
+         </table>
+    </div>
+
+    <div id="graphs" class="tab-pane">
+        <div class="user-selector">
+            <i class="fas fa-user-circle"></i>
+            <select id="graph-user"></select>
+            <i class="fas fa-tag"></i>
+            <select id="graph-topic"><option value="">All Topics</option></select>
+            <div style="flex:1"></div>
+            <div class="date-filter">
+                <input type="date" id="start-date" placeholder="Start">
+                <input type="date" id="end-date" placeholder="End">
+                <button id="date-apply">Apply</button>
+            </div>
+        </div>
+        <div class="chart-grid" id="graphGrid"></div>
+    </div>
+</div>
+
+<script>
+(function() {
+    // ==================== DUMMY DATA GENERATION ====================
+    const DUMMY_USERS_KEY = 'equa_dummy_initialized';
+    const USER_CONFIG_KEY = 'equa_user_config';
+    const MASTERY_KEY = 'equa_mastery_data';
+    const ATTEMPTS_KEY = 'equa_attempts';
+
+    function generateDummyData() {
+        if (localStorage.getItem(DUMMY_USERS_KEY)) return;
+
+        // Dummy usernames
+        const names = [
+            "MathWizard", "AlgebraNinja", "CalculusKing", "FractionFighter", "EquationExpert",
+            "DerivativeDuke", "IntegralQueen", "PolynomialPro", "TrigTitan", "SigmaSage",
+            "VectorVirtuoso", "MatrixMage", "LimitLord", "FunctionFanatic", "ExponentElite",
+            "LogarithmLion", "QuadraticQueen", "RationalRanger", "InequalityIvy", "SequenceSolver"
+        ];
+        const topics = [
+            "Addition & Subtraction", "Multiplication & Division", "Order of Operations",
+            "Fraction Operations", "Decimal Arithmetic", "One-Step Equations", "Two-Step Equations",
+            "Variables Both Sides", "Equations with Parentheses", "Substitution Method", "Elimination Method",
+            "Factoring Quadratics", "Zero Product Property", "Quadratic Formula", "Completing the Square",
+            "Add/Subtract Polynomials", "Multiply Polynomials", "Evaluate Functions", "Function Notation",
+            "Sine, Cosine, Tangent", "Trig Equations"
+        ];
+
+        const users = [];
+        const attempts = [];
+        const masteryTopics = [];
+
+        // Create 15 dummy users
+        for (let i = 0; i < 15; i++) {
+            const username = names[i % names.length] + (i < names.length ? "" : (Math.floor(i / names.length) + 1));
+            const elo = 800 + Math.floor(Math.random() * 1200);
+            const masteryLevel = Math.min(10, Math.max(1, Math.floor(elo / 200) + 1));
+            const flagged = Math.random() < 0.2;
+            const flaggedReason = flagged ? ["Tab switching", "Suspicious speed", "Multiple accounts", "Copy-paste detected"][Math.floor(Math.random()*4)] : null;
+            const banned = flagged && Math.random() < 0.3;
+            const totalGames = 20 + Math.floor(Math.random() * 80);
+            const correctAttempts = Math.floor(totalGames * (0.4 + Math.random() * 0.5));
+            const lastActive = Date.now() - Math.floor(Math.random() * 30 * 24 * 3600000);
+
+            users.push({
+                id: `dummy_${i}`,
+                username,
+                elo,
+                masteryLevel,
+                flagged,
+                flaggedReason,
+                banned,
+                lastActive,
+                totalAttempts: totalGames,
+                correctAttempts,
+                topics: {}
+            });
+
+            // Generate topic mastery for this user
+            const userTopics = [];
+            topics.forEach(topic => {
+                const completion = Math.min(100, Math.max(0, Math.floor(Math.random() * 100)));
+                userTopics.push({
+                    name: topic,
+                    completion,
+                    correctStreak: 0,
+                    lastAttemptCorrect: null,
+                    level: masteryLevel
+                });
+            });
+            masteryTopics.push({ userId: users[i].id, topics: userTopics });
+
+            // Generate attempts over last 30 days
+            const daysBack = 30;
+            const startDate = Date.now() - daysBack * 24 * 3600000;
+            for (let d = 0; d < daysBack; d++) {
+                if (Math.random() < 0.3) continue; // skip some days
+                const attemptsPerDay = Math.floor(Math.random() * 3) + 1;
+                for (let a = 0; a < attemptsPerDay; a++) {
+                    const timestamp = startDate + d * 24 * 3600000 + Math.random() * 24 * 3600000;
+                    const topic = topics[Math.floor(Math.random() * topics.length)];
+                    const correct = Math.random() < (correctAttempts / totalGames);
+                    attempts.push({
+                        userId: users[i].id,
+                        timestamp,
+                        mode: Math.random() < 0.6 ? "practice" : (Math.random() < 0.5 ? "ranked" : "vs"),
+                        topic,
+                        correct,
+                        timeTaken: Math.floor(Math.random() * 120),
+                        checksUsed: Math.floor(Math.random() * 5),
+                        eloGained: correct ? Math.floor(Math.random() * 30) : -Math.floor(Math.random() * 20),
+                        level: masteryLevel
+                    });
+                }
+            }
+        }
+
+        // Add a real user if none exists
+        const existingUser = localStorage.getItem(USER_CONFIG_KEY);
+        if (!existingUser) {
+            const realUser = {
+                userName: "Guest",
+                coach: { name: "Maya", imageUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Maya" },
+                stats: {
+                    elo: 1200,
+                    totalGames: 45,
+                    totalWins: 28,
+                    totalTimeBonus: 150,
+                    fastestTime: 32,
+                    totalChecksUsed: 12,
+                    totalTimeSpent: 3600,
+                    offences: 0,
+                    restricted: false,
+                    flagged: false,
+                    lastActive: Date.now()
+                }
+            };
+            localStorage.setItem(USER_CONFIG_KEY, JSON.stringify(realUser));
+            // Add a few attempts for this user
+            for (let i = 0; i < 30; i++) {
+                const timestamp = Date.now() - Math.random() * 30 * 24 * 3600000;
+                attempts.push({
+                    userId: "current",
+                    timestamp,
+                    mode: "ranked",
+                    topic: topics[Math.floor(Math.random() * topics.length)],
+                    correct: Math.random() < 0.6,
+                    timeTaken: Math.floor(Math.random() * 90),
+                    checksUsed: Math.floor(Math.random() * 4),
+                    eloGained: 0,
+                    level: 4
+                });
+            }
+        }
+
+        // Store dummy data
+        localStorage.setItem(DUMMY_USERS_KEY, "true");
+        localStorage.setItem('equa_dummy_users', JSON.stringify(users));
+        localStorage.setItem('equa_dummy_attempts', JSON.stringify(attempts));
+        localStorage.setItem('equa_dummy_mastery', JSON.stringify(masteryTopics));
+    }
+
+    generateDummyData();
+
+    // ==================== DATA LOADING (real + dummy) ====================
+    let userConfig = null;
+    let masteryData = null;
+    let attempts = [];
+    let dummyUsers = [];
+    let dummyAttempts = [];
+    let dummyMastery = [];
+
+    function loadAllData() {
+        try {
+            const savedConfig = localStorage.getItem(USER_CONFIG_KEY);
+            userConfig = savedConfig ? JSON.parse(savedConfig) : null;
+            const savedMastery = localStorage.getItem(MASTERY_KEY);
+            masteryData = savedMastery ? JSON.parse(savedMastery) : null;
+            const savedAttempts = localStorage.getItem(ATTEMPTS_KEY);
+            attempts = savedAttempts ? JSON.parse(savedAttempts) : [];
+
+            const savedDummyUsers = localStorage.getItem('equa_dummy_users');
+            dummyUsers = savedDummyUsers ? JSON.parse(savedDummyUsers) : [];
+            const savedDummyAttempts = localStorage.getItem('equa_dummy_attempts');
+            dummyAttempts = savedDummyAttempts ? JSON.parse(savedDummyAttempts) : [];
+            const savedDummyMastery = localStorage.getItem('equa_dummy_mastery');
+            dummyMastery = savedDummyMastery ? JSON.parse(savedDummyMastery) : [];
+        } catch(e) { console.error(e); }
+    }
+
+    function getCombinedUsers() {
+        loadAllData();
+        const combined = [];
+        if (userConfig) {
+            combined.push({
+                id: 'current',
+                username: userConfig.userName || 'Guest',
+                elo: userConfig.stats?.elo || 0,
+                masteryLevel: masteryData ? masteryData.currentLevel : 1,
+                flagged: userConfig.stats?.flagged || false,
+                flaggedReason: userConfig.stats?.flaggedReason || null,
+                banned: userConfig.stats?.restricted || false,
+                lastActive: userConfig.stats?.lastActive || Date.now(),
+                totalAttempts: userConfig.stats?.totalGames || 0,
+                correctAttempts: userConfig.stats?.totalWins || 0,
+                topics: masteryData ? masteryData.topics || [] : []
+            });
+        }
+        dummyUsers.forEach(u => {
+            combined.push(u);
+        });
+        return combined;
+    }
+
+    function getAttemptsForUser(userId) {
+        loadAllData();
+        let userAttempts = [];
+        if (userId === 'current') {
+            userAttempts = [...attempts];
+        } else {
+            userAttempts = dummyAttempts.filter(a => a.userId === userId);
+        }
+        return userAttempts.sort((a,b) => a.timestamp - b.timestamp);
+    }
+
+    function getMasteryForUser(userId) {
+        if (userId === 'current') return masteryData;
+        const found = dummyMastery.find(m => m.userId === userId);
+        return found ? { topics: found.topics, currentLevel: found.topics[0]?.level || 1, globalStreak: 0 } : null;
+    }
+
+    window.EquaUser = {
+        getUsers: getCombinedUsers,
+        getSummary: function() {
+            const users = this.getUsers();
+            const totalUsers = users.length;
+            const activeUsers = users.filter(u => (Date.now() - u.lastActive) < 7*24*3600000).length;
+            const avgElo = totalUsers ? users.reduce((s,u) => s + u.elo, 0) / totalUsers : 0;
+            const flaggedCount = users.filter(u => u.flagged).length;
+            const avgMastery = totalUsers ? users.reduce((s,u) => s + u.masteryLevel, 0) / totalUsers : 0;
+            return { totalUsers, activeUsers, avgElo, flaggedCount, avgMastery };
+        },
+        getLeaderboard: function(filters = {}) {
+            let users = this.getUsers();
+            if (filters.username) users = users.filter(u => u.username.toLowerCase().includes(filters.username.toLowerCase()));
+            if (filters.minElo) users = users.filter(u => u.elo >= filters.minElo);
+            if (filters.minMastery) users = users.filter(u => u.masteryLevel >= filters.minMastery);
+            if (filters.sortBy === 'mastery') users.sort((a,b) => b.masteryLevel - a.masteryLevel);
+            else if (filters.sortBy === 'winrate') users.sort((a,b) => (b.correctAttempts/b.totalAttempts||0) - (a.correctAttempts/a.totalAttempts||0));
+            else users.sort((a,b) => b.elo - a.elo);
+            return users.map(u => ({
+                username: u.username,
+                elo: u.elo,
+                masteryLevel: u.masteryLevel,
+                winRate: u.totalAttempts ? (u.correctAttempts / u.totalAttempts * 100).toFixed(1) : 0
+            }));
+        },
+        getFlaggedUsers: function(filters = {}) {
+            let users = this.getUsers();
+            let flagged = users.filter(u => u.flagged);
+            if (filters.username) flagged = flagged.filter(u => u.username.toLowerCase().includes(filters.username.toLowerCase()));
+            if (filters.reason) flagged = flagged.filter(u => u.flaggedReason && u.flaggedReason.toLowerCase().includes(filters.reason.toLowerCase()));
+            return flagged.map(u => ({
+                id: u.id,
+                username: u.username,
+                reason: u.flaggedReason || 'No reason',
+                lastActive: new Date(u.lastActive).toLocaleString(),
+                banned: u.banned
+            }));
+        },
+        banUser: function(userId) {
+            if (userId === 'current') {
+                loadAllData();
+                if (userConfig) {
+                    if (!userConfig.stats) userConfig.stats = {};
+                    userConfig.stats.restricted = true;
+                    localStorage.setItem(USER_CONFIG_KEY, JSON.stringify(userConfig));
+                    return true;
+                }
+            } else {
+                // dummy user ban: update in localStorage
+                const saved = localStorage.getItem('equa_dummy_users');
+                if (saved) {
+                    const users = JSON.parse(saved);
+                    const idx = users.findIndex(u => u.id === userId);
+                    if (idx !== -1) {
+                        users[idx].banned = true;
+                        localStorage.setItem('equa_dummy_users', JSON.stringify(users));
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
+        unbanUser: function(userId) {
+            if (userId === 'current') {
+                loadAllData();
+                if (userConfig) {
+                    if (!userConfig.stats) userConfig.stats = {};
+                    userConfig.stats.restricted = false;
+                    localStorage.setItem(USER_CONFIG_KEY, JSON.stringify(userConfig));
+                    return true;
+                }
+            } else {
+                const saved = localStorage.getItem('equa_dummy_users');
+                if (saved) {
+                    const users = JSON.parse(saved);
+                    const idx = users.findIndex(u => u.id === userId);
+                    if (idx !== -1) {
+                        users[idx].banned = false;
+                        localStorage.setItem('equa_dummy_users', JSON.stringify(users));
+                        return true;
+                    }
+                }
+            }
+            return false;
+        },
+        getUserPerformance: function(userId, topic = null, startDate = null, endDate = null) {
+            const user = this.getUsers().find(u => u.id === userId);
+            if (!user) return null;
+            const userAttempts = getAttemptsForUser(userId);
+            let filtered = userAttempts;
+            if (startDate) filtered = filtered.filter(a => a.timestamp >= new Date(startDate).getTime());
+            if (endDate) filtered = filtered.filter(a => a.timestamp <= new Date(endDate).getTime());
+            if (topic) filtered = filtered.filter(a => a.topic === topic);
+
+            const byDay = {};
+            filtered.forEach(a => {
+                const day = new Date(a.timestamp).toISOString().split('T')[0];
+                if (!byDay[day]) byDay[day] = { total: 0, correct: 0 };
+                byDay[day].total++;
+                if (a.correct) byDay[day].correct++;
+            });
+            const timeSeries = Object.keys(byDay).sort().map(day => ({
+                date: day,
+                accuracy: (byDay[day].correct / byDay[day].total) * 100
+            }));
+
+            // Streak over time
+            let currentStreak = 0;
+            const streakByDate = [];
+            for (let i = 0; i < filtered.length; i++) {
+                if (filtered[i].correct) currentStreak++;
+                else currentStreak = 0;
+                const date = new Date(filtered[i].timestamp).toISOString().split('T')[0];
+                streakByDate.push({ date, streak: currentStreak });
+            }
+            // Group by date (take max streak per day)
+            const streakMap = new Map();
+            streakByDate.forEach(s => {
+                if (!streakMap.has(s.date) || streakMap.get(s.date) < s.streak) streakMap.set(s.date, s.streak);
+            });
+            const streakDays = Array.from(streakMap.keys()).sort();
+            const streakValues = streakDays.map(d => streakMap.get(d));
+
+            // Topic mastery
+            const mastery = getMasteryForUser(userId);
+            let topicMastery = [];
+            if (mastery && mastery.topics) {
+                topicMastery = mastery.topics.map(t => ({
+                    topic: t.name,
+                    completion: t.completion || 0,
+                    total: 0,
+                    correct: 0
+                }));
+                if (topic) topicMastery = topicMastery.filter(t => t.topic === topic);
+            } else {
+                // fallback: generate dummy topics from attempts
+                const topicsSet = new Set();
+                userAttempts.forEach(a => topicsSet.add(a.topic));
+                topicMastery = Array.from(topicsSet).map(t => ({
+                    topic: t,
+                    completion: Math.floor(Math.random() * 100),
+                    total: userAttempts.filter(a => a.topic === t).length,
+                    correct: userAttempts.filter(a => a.topic === t && a.correct).length
+                }));
+            }
+
+            const totalAttempts = user.totalAttempts;
+            const correctAttempts = user.correctAttempts;
+
+            return {
+                username: user.username,
+                elo: user.elo,
+                masteryLevel: user.masteryLevel,
+                streak: user.correctAttempts ? 1 : 0, // placeholder
+                totalAttempts,
+                correctAttempts,
+                overallAccuracy: totalAttempts ? (correctAttempts / totalAttempts * 100) : 0,
+                timeSeries,
+                streakDays,
+                streakValues,
+                topicMastery,
+                filteredAttempts: filtered
+            };
+        },
+        getEloDistribution: function() {
+            const users = this.getUsers();
+            const elos = users.map(u => u.elo);
+            if (elos.length === 0) return [];
+            const min = Math.min(...elos, 0);
+            const max = Math.max(...elos, 2000);
+            const binSize = 100;
+            const bins = [];
+            for (let i = Math.floor(min / binSize) * binSize; i <= max; i += binSize) {
+                bins.push({ lower: i, upper: i + binSize, count: 0 });
+            }
+            elos.forEach(elo => {
+                const idx = Math.floor((elo - bins[0].lower) / binSize);
+                if (idx >= 0 && idx < bins.length) bins[idx].count++;
+            });
+            return bins;
+        }
+    };
+
+    // ==================== UI RENDERING ====================
+    function updateSummaryStats() {
+        const summary = EquaUser.getSummary();
+        document.getElementById('summaryStats').innerHTML = `
+            <div class="stat-card"><i class="fas fa-users"></i><div class="value">${summary.totalUsers}</div><div class="label">Total Users</div></div>
+            <div class="stat-card"><i class="fas fa-user-check"></i><div class="value">${summary.activeUsers}</div><div class="label">Active (7d)</div></div>
+            <div class="stat-card"><i class="fas fa-chart-line"></i><div class="value">${Math.round(summary.avgElo)}</div><div class="label">Avg ELO</div></div>
+            <div class="stat-card"><i class="fas fa-flag"></i><div class="value">${summary.flaggedCount}</div><div class="label">Flagged</div></div>
+            <div class="stat-card"><i class="fas fa-brain"></i><div class="value">${summary.avgMastery.toFixed(1)}</div><div class="label">Avg Mastery</div></div>
+        `;
+    }
+
+    function populateUserDropdown() {
+        const users = EquaUser.getUsers();
+        const select = document.getElementById('graph-user');
+        select.innerHTML = '<option value="">Select a user</option>';
+        users.forEach(u => {
+            if (!u.banned) {
+                const opt = document.createElement('option');
+                opt.value = u.id;
+                opt.textContent = u.username;
+                select.appendChild(opt);
+            }
+        });
+        // Optionally select first user automatically
+        if (users.length > 0 && select.options.length > 1) select.selectedIndex = 1;
+    }
+
+    function populateTopicDropdown(userId) {
+        const perf = EquaUser.getUserPerformance(userId);
+        const select = document.getElementById('graph-topic');
+        select.innerHTML = '<option value="">All Topics</option>';
+        if (perf && perf.topicMastery) {
+            perf.topicMastery.forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.topic;
+                opt.textContent = t.topic;
+                select.appendChild(opt);
+            });
+        }
+    }
+
+    function renderGraphs(userId, topic = null, startDate = null, endDate = null) {
+        if (!userId) return;
+        const perf = EquaUser.getUserPerformance(userId, topic, startDate, endDate);
+        const grid = document.getElementById('graphGrid');
+        if (!perf || (!perf.timeSeries.length && !perf.topicMastery.length)) {
+            grid.innerHTML = '<div class="empty-message"><i class="fas fa-chart-line"></i> No data for this selection. Try different filters.</div>';
+            return;
+        }
+
+        grid.innerHTML = `
+            <div class="chart-card"><h3><i class="fas fa-chart-line"></i> Accuracy Over Time</h3><canvas id="timeChart"></canvas></div>
+            <div class="chart-card"><h3><i class="fas fa-chart-line"></i> Streak Over Time</h3><canvas id="streakChart"></canvas></div>
+            <div class="chart-card"><h3><i class="fas fa-chart-bar"></i> Topic Mastery</h3><canvas id="topicChart"></canvas></div>
+            <div class="chart-card"><h3><i class="fas fa-chart-line"></i> ELO Distribution</h3><canvas id="eloHistogram"></canvas></div>
+            <div class="chart-card"><h3><i class="fas fa-chart-pie"></i> Overall Performance</h3><canvas id="overallPie"></canvas></div>
+            <div class="chart-card"><h3><i class="fas fa-chart-radar"></i> Adaptability Radar</h3><canvas id="radarChart"></canvas></div>
+        `;
+
+        // Accuracy over time
+        const timeCtx = document.getElementById('timeChart').getContext('2d');
+        if (window.timeChart) window.timeChart.destroy();
+        window.timeChart = new Chart(timeCtx, {
+            type: 'line',
+            data: {
+                labels: perf.timeSeries.map(d => d.date),
+                datasets: [{ label: 'Accuracy (%)', data: perf.timeSeries.map(d => d.accuracy), borderColor: '#2b4bff', fill: false, tension: 0.3 }]
+            },
+            options: { responsive: true, maintainAspectRatio: true, plugins: { tooltip: { callbacks: { label: ctx => `${ctx.raw.toFixed(1)}%` } } } }
+        });
+
+        // Streak over time
+        const streakCtx = document.getElementById('streakChart').getContext('2d');
+        if (window.streakChart) window.streakChart.destroy();
+        window.streakChart = new Chart(streakCtx, {
+            type: 'line',
+            data: {
+                labels: perf.streakDays || [],
+                datasets: [{ label: 'Streak', data: perf.streakValues || [], borderColor: '#ff9800', fill: false }]
+            },
+            options: { responsive: true }
+        });
+
+        // Topic mastery bar
+        const topicCtx = document.getElementById('topicChart').getContext('2d');
+        if (window.topicChart) window.topicChart.destroy();
+        window.topicChart = new Chart(topicCtx, {
+            type: 'bar',
+            data: {
+                labels: perf.topicMastery.map(t => t.topic),
+                datasets: [{ label: 'Completion (%)', data: perf.topicMastery.map(t => t.completion), backgroundColor: '#2b4bff' }]
+            },
+            options: { scales: { y: { max: 100, title: { display: true, text: 'Completion %' } } } }
+        });
+
+        // ELO distribution (all users)
+        const bins = EquaUser.getEloDistribution();
+        const labels = bins.map(b => `${b.lower}-${b.upper}`);
+        const counts = bins.map(b => b.count);
+        const histCtx = document.getElementById('eloHistogram').getContext('2d');
+        if (window.histoChart) window.histoChart.destroy();
+        window.histoChart = new Chart(histCtx, {
+            type: 'bar',
+            data: { labels, datasets: [{ label: 'Number of Players', data: counts, backgroundColor: '#4bc0c0' }] },
+            options: { scales: { y: { beginAtZero: true, title: { display: true, text: 'Players' } } } }
+        });
+
+        // Overall pie
+        const pieCtx = document.getElementById('overallPie').getContext('2d');
+        if (window.pieChart) window.pieChart.destroy();
+        window.pieChart = new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Correct', 'Incorrect'],
+                datasets: [{ data: [perf.correctAttempts, perf.totalAttempts - perf.correctAttempts], backgroundColor: ['#28a745', '#dc3545'] }]
+            }
+        });
+
+        // Radar
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        if (window.radarChart) window.radarChart.destroy();
+        window.radarChart = new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: perf.topicMastery.map(t => t.topic),
+                datasets: [{ label: 'Adaptability', data: perf.topicMastery.map(t => Math.min(100, t.completion)), backgroundColor: 'rgba(43,75,255,0.2)', borderColor: '#2b4bff' }]
+            },
+            options: { scales: { r: { min: 0, max: 100, ticks: { stepSize: 20 } } } }
+        });
+    }
+
+    function updateLeaderboard() {
+        const username = document.getElementById('leaderboard-search').value;
+        const minElo = document.getElementById('leaderboard-min-elo').value;
+        const minMastery = document.getElementById('leaderboard-min-mastery').value;
+        const sortBy = document.getElementById('leaderboard-sort').value;
+        const filters = {};
+        if (username) filters.username = username;
+        if (minElo) filters.minElo = parseInt(minElo);
+        if (minMastery) filters.minMastery = parseInt(minMastery);
+        filters.sortBy = sortBy;
+        const leaderboard = EquaUser.getLeaderboard(filters);
+        const tbody = document.querySelector('#leaderboard-table tbody');
+        tbody.innerHTML = '';
+        leaderboard.forEach((user, idx) => {
+            const row = tbody.insertRow();
+            const rankCell = row.insertCell(0);
+            if (idx === 0) rankCell.innerHTML = '<span class="medal">🥇</span> 1';
+            else if (idx === 1) rankCell.innerHTML = '<span class="medal">🥈</span> 2';
+            else if (idx === 2) rankCell.innerHTML = '<span class="medal">🥉</span> 3';
+            else rankCell.textContent = idx+1;
+            row.insertCell(1).textContent = user.username;
+            row.insertCell(2).textContent = user.elo;
+            row.insertCell(3).textContent = user.masteryLevel;
+            row.insertCell(4).textContent = user.winRate + '%';
+            if (idx === 0) row.classList.add('rank-1');
+            else if (idx === 1) row.classList.add('rank-2');
+            else if (idx === 2) row.classList.add('rank-3');
+        });
+    }
+
+    function updateFlaggedUsers() {
+        const username = document.getElementById('flag-search-username').value;
+        const reason = document.getElementById('flag-search-reason').value;
+        const filters = {};
+        if (username) filters.username = username;
+        if (reason) filters.reason = reason;
+        const flagged = EquaUser.getFlaggedUsers(filters);
+        const tbody = document.querySelector('#flagged-table tbody');
+        tbody.innerHTML = '';
+        flagged.forEach(user => {
+            const row = tbody.insertRow();
+            row.insertCell(0).textContent = user.username;
+            row.insertCell(1).textContent = user.reason;
+            row.insertCell(2).textContent = user.lastActive;
+            row.insertCell(3).textContent = user.banned ? 'Yes' : 'No';
+            const actions = row.insertCell(4);
+            if (!user.banned) {
+                const banBtn = document.createElement('button');
+                banBtn.textContent = 'Ban';
+                banBtn.className = 'ban-btn';
+                banBtn.onclick = () => {
+                    if (confirm(`Ban ${user.username}?`)) {
+                        EquaUser.banUser(user.id);
+                        updateFlaggedUsers();
+                        updateLeaderboard();
+                        populateUserDropdown();
+                        updateSummaryStats();
+                    }
+                };
+                actions.appendChild(banBtn);
+            } else {
+                const unbanBtn = document.createElement('button');
+                unbanBtn.textContent = 'Unban';
+                unbanBtn.className = 'unban-btn';
+                unbanBtn.onclick = () => {
+                    EquaUser.unbanUser(user.id);
+                    updateFlaggedUsers();
+                    updateLeaderboard();
+                    populateUserDropdown();
+                    updateSummaryStats();
+                };
+                actions.appendChild(unbanBtn);
+            }
+        });
+    }
+
+    // Event listeners
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const tabId = btn.getAttribute('data-tab');
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            if (tabId === 'graphs') {
+                populateUserDropdown();
+                const firstUser = document.getElementById('graph-user').value;
+                if (firstUser) renderGraphs(firstUser);
+            }
+        });
+    });
+
+    document.getElementById('graph-user').addEventListener('change', (e) => {
+        const userId = e.target.value;
+        if (userId) {
+            populateTopicDropdown(userId);
+            const start = document.getElementById('start-date').value;
+            const end = document.getElementById('end-date').value;
+            renderGraphs(userId, document.getElementById('graph-topic').value, start, end);
+        }
+    });
+    document.getElementById('graph-topic').addEventListener('change', (e) => {
+        const userId = document.getElementById('graph-user').value;
+        if (userId) {
+            const start = document.getElementById('start-date').value;
+            const end = document.getElementById('end-date').value;
+            renderGraphs(userId, e.target.value, start, end);
+        }
+    });
+    document.getElementById('date-apply').addEventListener('click', () => {
+        const userId = document.getElementById('graph-user').value;
+        if (userId) {
+            const start = document.getElementById('start-date').value;
+            const end = document.getElementById('end-date').value;
+            renderGraphs(userId, document.getElementById('graph-topic').value, start, end);
+        }
+    });
+    document.getElementById('leaderboard-refresh').addEventListener('click', updateLeaderboard);
+    document.getElementById('flag-refresh').addEventListener('click', updateFlaggedUsers);
+    document.getElementById('leaderboard-search').addEventListener('input', updateLeaderboard);
+    document.getElementById('leaderboard-min-elo').addEventListener('input', updateLeaderboard);
+    document.getElementById('leaderboard-min-mastery').addEventListener('input', updateLeaderboard);
+    document.getElementById('leaderboard-sort').addEventListener('change', updateLeaderboard);
+    document.getElementById('flag-search-username').addEventListener('input', updateFlaggedUsers);
+    document.getElementById('flag-search-reason').addEventListener('input', updateFlaggedUsers);
+
+    // Initial load
+    updateSummaryStats();
+    updateLeaderboard();
+    updateFlaggedUsers();
+    populateUserDropdown();
+})();
+</script>
+</body>
+</html>

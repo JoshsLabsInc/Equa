@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Equa · VS mode (mobile)</title>
+    <link rel="shortcut icon" type="image/x-icon" href="tablogo.png"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #f0f4fa, #e6ecf5);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .vs-container {
+            max-width: 100%;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(14px);
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px #10224060;
+            padding: 1.5rem;
+            border: 1px solid #ffffff99;
+        }
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #162b4a, #2f4674);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .badge {
+            background: #d9e2f0;
+            color: #1e3a5f;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .game-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .user-panel, .opponent-panel {
+            width: 100%;
+        }
+        .problem-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            box-shadow: 0 20px 30px -12px #1f3a6030;
+        }
+        .problem-card h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #38537b;
+            margin-bottom: 1rem;
+        }
+        .problem {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            background: #f2f6ff;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            color: #0a1a33;
+            border: 2px dashed #b3c7e8;
+            margin-bottom: 1.5rem;
+            word-break: break-word;
+        }
+        .answer-area {
+            display: flex;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+        #answer {
+            flex: 1;
+            padding: 1rem;
+            font-size: 1.3rem;
+            border: 2px solid #dbe2f0;
+            border-radius: 60px;
+            outline: none;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+        #answer:focus {
+            border-color: #1e3f70;
+            box-shadow: 0 0 0 3px rgba(30,63,112,0.1);
+        }
+        .action-btns {
+            display: flex;
+            gap: 0.8rem;
+        }
+        .btn {
+            flex: 1;
+            background: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            border: 1px solid #cdd9ec;
+            transition: 0.15s;
+            color: #1e2f4a;
+        }
+        .btn-primary {
+            background: #1e2f4a;
+            color: white;
+            border: none;
+            box-shadow: 0 8px 16px -6px #162b44;
+        }
+        .btn-primary:hover { background: #2b4062; }
+        .btn-secondary:hover { background: #e8f0fe; }
+        .streak-box {
+            margin-top: 1.5rem;
+            background: #ffffffc0;
+            border-radius: 60px;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            font-weight: 600;
+            color: #14273e;
+            font-size: 0.9rem;
+        }
+        .opponent-card {
+            background: #ffffffd9;
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.8);
+            box-shadow: 0 12px 24px -12px #1a2f4a40;
+        }
+        .opponent-avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 0.5rem;
+            border-radius: 30px;
+            overflow: hidden;
+            background: #edf2fc;
+            border: 3px solid white;
+            box-shadow: 0 8px 12px -6px #0e1e32;
+        }
+        .opponent-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .opponent-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #14273e;
+        }
+        .timer {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: #e6edf8;
+            border-radius: 60px;
+            padding: 0.4rem 1rem;
+            width: fit-content;
+            margin: 0.8rem auto;
+            min-width: 120px;
+            color: #14273e;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #d2def0;
+            border-radius: 30px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        #progress {
+            height: 10px;
+            background: linear-gradient(90deg, #3f66a0, #162b44);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        #opponent-status {
+            font-weight: 500;
+            color: #3c5780;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .chat-panel {
+            background: #ffffffd9;
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.8);
+            margin-top: 1rem;
+        }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .chat-header h4 {
+            font-size: 1.2rem;
+            color: #1d314b;
+        }
+        .chat-messages {
+            background: #f5f9ff;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            min-height: 120px;
+            max-height: 180px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            border: 1px solid #d4e1f5;
+        }
+        .chat-messages div {
+            margin-bottom: 0.6rem;
+            padding: 0.4rem 0.8rem;
+            background: white;
+            border-radius: 30px;
+            width: fit-content;
+            max-width: 85%;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 6px #00000008;
+        }
+        .chat-messages .ai-message {
+            background: #1e2f4a;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+        }
+        #chat-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #c4d3ea;
+            outline: none;
+            font-size: 0.9rem;
+        }
+        .icon-btn {
+            background: #1e2f4a;
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.15s;
+            box-shadow: 0 6px 10px -4px #1e2f4a80;
+        }
+        .icon-btn:hover { background: #2e4570; }
+        .hint-btn {
+            background: #e6eefc;
+            color: #1e2f4a;
+            border: 1px solid #b5c9e8;
+            width: auto;
+            padding: 0 1.2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: none;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(6px);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: white;
+            max-width: 90%;
+            width: 400px;
+            border-radius: 48px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 40px 60px -10px #0e1e32;
+        }
+        .modal-content h2 { font-size: 1.8rem; margin-bottom: 1rem; color: #14273e; }
+        .difficulty-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin: 1.5rem 0 1rem;
+        }
+        .difficulty-buttons button {
+            background: #f0f5ff;
+            border: none;
+            padding: 1rem;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1b314e;
+            cursor: pointer;
+            border: 1px solid #bdcff0;
+            transition: 0.15s;
+        }
+        .difficulty-buttons button:hover { background: #dae6ff; transform: scale(1.02); }
+        .close-modal { margin-top: 1rem; color: #6b85ac; cursor: pointer; font-size: 0.9rem; }
+        .loss-modal .modal-content { max-width: 90%; }
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .modal-actions button {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            background: #1e2f4a;
+            color: white;
+        }
+        .modal-actions button.menu-btn { background: #e2e9f5; color: #1e2f4a; }
+        .solution-details {
+            background: #f8f9fa;
+            border-radius: 24px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: left;
+            font-family: monospace;
+            font-size: 0.85rem;
+            border-left: 4px solid #2b4bff;
+        }
+        footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #5b7193;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<div id="difficultyModal" class="modal-overlay" style="display: flex;">
+    <div class="modal-content">
+        <h2>⚡ choose difficulty</h2>
+        <p style="color:#3a557f;">VS mode · race against a random bot</p>
+        <div class="difficulty-buttons">
+            <button data-diff="easy">🌱 Easy · 20 sec</button>
+            <button data-diff="medium">🍂 Medium · 15 sec</button>
+            <button data-diff="hard">🔥 Hard · 8 sec</button>
+            <button data-diff="einstein">🧠 Einstein · 4 sec</button>
+        </div>
+        <div class="close-modal" id="closeModalLater">click outside to start</div>
+    </div>
+</div>
+
+<div id="lossModal" class="modal-overlay">
+    <div class="modal-content loss-modal">
+        <h2>😲 Opponent won!</h2>
+        <p style="font-size:1.1rem; margin:0.5rem 0;">Here's the solution – learn from it!</p>
+        <div id="lossSolution" class="solution-details"></div>
+        <div class="modal-actions">
+            <button id="continueBtn">⏵ Continue</button>
+            <button id="menuBtn" class="menu-btn">🏠 Menu</button>
+        </div>
+    </div>
+</div>
+
+<div class="vs-container">
+    <h1>⚔️ Equa VS mode <span class="badge"><i class="fas fa-robot"></i> opponent: <span id="opponentNameSpan">Algebot</span></span></h1>
+
+    <div class="game-grid">
+        <div class="user-panel">
+            <div class="problem-card">
+                <h3>📝 solve for x</h3>
+                <div id="problem" class="problem">2x + 3 = 7</div>
+                <div class="answer-area">
+                    <input type="text" id="answer" placeholder="your answer" autocomplete="off">
+                </div>
+                <div class="action-btns">
+                    <button class="btn btn-primary" id="submit">✓ submit</button>
+                    <button class="btn btn-secondary" id="new-problem">↻ new</button>
+                </div>
+            </div>
+            <div class="streak-box">
+                <span>🔥 streak <span id="streak">0</span></span>
+                <span>⚡ difficulty <span id="current-diff">easy</span></span>
+            </div>
+        </div>
+
+        <div class="opponent-panel">
+            <div class="opponent-card">
+                <div class="opponent-avatar">
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=opponent&backgroundColor=b6e3f4" alt="opponent">
+                </div>
+                <div class="opponent-name" id="opponentNameDisplay">Algebot</div>
+                <div class="timer" id="opponent-timer">--</div>
+                <div class="progress-bar"><div id="progress" style="width:0%;"></div></div>
+                <div id="opponent-status">waiting for problem</div>
+            </div>
+
+            <div class="chat-panel">
+                <div class="chat-header">
+                    <div style="width: 40px; height: 40px; border-radius: 20px; overflow: hidden; background: #ffe0b0;">
+                        <img id="coachAvatarImg" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Maya&mouth=smile&eyes=happy&hair=long&accessories=round&backgroundColor=b6e3f4,ffd5dc,ffdfbf" style="width:100%; height:100%; object-fit:cover;" alt="Coach">
+                    </div>
+                    <h4><span id="coachName">Maya</span> <span style="font-size:0.8rem; font-weight:400;">(your coach)</span></h4>
+                </div>
+                <div id="chat-messages" class="chat-messages">
+                    <div>👋 Hi! I'm your coach. Ask for a hint anytime.</div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="chat-input" placeholder="ask your coach...">
+                    <button class="icon-btn" id="chat-send"><i class="fas fa-paper-plane"></i></button>
+                    <button class="icon-btn hint-btn" id="hint-button">💡 hint</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>repetition · mastery · ungraded · adaptive opponent</footer>
+</div>
+
+<script>
+(function() {
+    const STORAGE_KEY = 'equa_user_config';
+    let userConfig = null;
+    let userName = 'there';
+
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+            userConfig = JSON.parse(saved);
+            userName = userConfig.userName || 'there';
+        } else {
+            window.location.href = 'index.html';
+            return;
+        }
+    } catch (e) {
+        window.location.href = 'index.html';
+        return;
+    }
+
+    if (userConfig && userConfig.coach) {
+        const coach = userConfig.coach;
+        document.getElementById('coachName').textContent = coach.name;
+        if (coach.imageUrl) document.getElementById('coachAvatarImg').src = coach.imageUrl;
+    }
+
+    const opponentNames = [
+        "Algebot", "Derivatus", "Calculon", "Pi-thon", "Fractionator", "X-ponent", "Matrix", "Vector",
+        "Sigmoid", "Gradient", "Limitron", "Integral", "Polynome", "Slopebot", "Asymptote", "Functionator",
+        "Quadratica", "Logarithmos", "Trigono", "Exponentia", "Radical Rex", "Imaginary Ian", "Complex Carl",
+        "Fibonacci Fred", "Prime Pete", "Rational Rita", "Decimal Dan", "Sinewave Sam", "Cosine Casey", "Tangent Tim"
+    ];
+    const randomOpponentName = opponentNames[Math.floor(Math.random() * opponentNames.length)];
+    document.getElementById('opponentNameSpan').textContent = randomOpponentName;
+    document.getElementById('opponentNameDisplay').textContent = randomOpponentName;
+
+    const delayMap = { easy: 20000, medium: 15000, hard: 8000, einstein: 4000 };
+    let currentDifficulty = 'easy';
+    let currentDelay = delayMap.easy;
+    let streak = 0;
+    let problemActive = true;
+    let opponentTimer = null, opponentInterval = null;
+    let currentProblem = { text: '2x + 3 = 7', answer: 2 };
+    let opponentStartTime = 0;
+    let hintCount = 0;
+
+    const problemEl = document.getElementById('problem');
+    const answerInput = document.getElementById('answer');
+    const submitBtn = document.getElementById('submit');
+    const newProblemBtn = document.getElementById('new-problem');
+    const streakSpan = document.getElementById('streak');
+    const currentDiffSpan = document.getElementById('current-diff');
+    const opponentTimerEl = document.getElementById('opponent-timer');
+    const opponentStatus = document.getElementById('opponent-status');
+    const progressBar = document.getElementById('progress');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+    const hintButton = document.getElementById('hint-button');
+    const difficultyModal = document.getElementById('difficultyModal');
+    const lossModal = document.getElementById('lossModal');
+    const continueBtn = document.getElementById('continueBtn');
+    const menuBtn = document.getElementById('menuBtn');
+    const lossSolutionDiv = document.getElementById('lossSolution');
+
+    function analyzeProblem(problemText) {
+        const match = problemText.match(/([+-]?\d*)x\s*([+-]\s*\d+)?\s*=\s*([+-]?\d+)/);
+        if (!match) return null;
+        let coefficient = match[1] === '' || match[1] === '+' ? 1 : (match[1] === '-' ? -1 : parseInt(match[1]));
+        let constant = match[2] ? parseInt(match[2].replace(/\s+/g, '')) : 0;
+        let result = parseInt(match[3]);
+        return { coefficient, constant, result };
+    }
+
+    function getContextualHint() {
+        const components = analyzeProblem(currentProblem.text);
+        hintCount++;
+        if (!components) return getRandomHint();
+        const { coefficient, constant, result } = components;
+        if (hintCount === 1) {
+            const hints = [`🔍 ${userName}, first isolate x. What operation undoes ${constant >= 0 ? '+' + constant : constant}?`, `🧮 Move ${Math.abs(constant)} to the right side, ${userName}.`];
+            return hints[Math.floor(Math.random() * hints.length)];
+        } else if (hintCount === 2) {
+            const rightSide = result - constant;
+            return `⚡ ${userName}, now you have ${coefficient}x = ${rightSide}. Divide by ${coefficient}.`;
+        } else {
+            const answer = (result - constant) / coefficient;
+            return `💡 The solution is x = ${answer}, ${userName}. Try working backwards!`;
+        }
+    }
+
+    function getRandomHint() {
+        const hints = ["🧩 Isolate the variable.", "📚 Use inverse operations.", "⚖️ Do the same to both sides."];
+        return `${userName}, ${hints[Math.floor(Math.random() * hints.length)]}`;
+    }
+
+    function addChatMessage(text, isUser = false) {
+        const msgDiv = document.createElement('div');
+        msgDiv.innerText = text;
+        if (!isUser) msgDiv.classList.add('ai-message');
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function generateRandomProblem() {
+        const a = Math.floor(Math.random() * 5) + 1;
+        const x = Math.floor(Math.random() * 11) - 5;
+        const b = Math.floor(Math.random() * 11) - 5;
+        const c = a * x + b;
+        return { text: `${a}x ${b >= 0 ? '+ ' + b : '- ' + Math.abs(b)} = ${c}`, answer: x };
+    }
+
+    function setProblem(prob) {
+        currentProblem = prob;
+        problemEl.innerText = prob.text;
+        answerInput.value = '';
+        problemActive = true;
+        hintCount = 0;
+    }
+
+    function startOpponentTimer(delay) {
+        if (opponentTimer) clearTimeout(opponentTimer);
+        if (opponentInterval) clearInterval(opponentInterval);
+        opponentStartTime = Date.now();
+        opponentTimerEl.innerText = (delay / 1000).toFixed(1) + 's';
+        opponentStatus.innerText = `🤖 ${randomOpponentName} is thinking ...`;
+        progressBar.style.width = '0%';
+        opponentInterval = setInterval(() => {
+            if (!problemActive) return;
+            const elapsed = Date.now() - opponentStartTime;
+            const percent = Math.min(100, (elapsed / delay) * 100);
+            progressBar.style.width = percent + '%';
+            const remainingSec = Math.max(0, (delay - elapsed) / 1000).toFixed(1);
+            opponentTimerEl.innerText = remainingSec + 's';
+            if (elapsed >= delay) {
+                clearInterval(opponentInterval);
+                clearTimeout(opponentTimer);
+                if (problemActive) {
+                    problemActive = false;
+                    opponentStatus.innerText = `🏆 ${randomOpponentName} won!`;
+                    const solutionSteps = `Equation: ${currentProblem.text}\nStep 1: Move constant to the right.\nStep 2: Divide by coefficient.\nSolution: x = ${currentProblem.answer}`;
+                    lossSolutionDiv.innerHTML = `<strong>Correct solution:</strong><br>${solutionSteps.replace(/\n/g, '<br>')}<br><br>Your answer was: ${answerInput.value.trim() || '(none)'}`;
+                    lossModal.style.display = 'flex';
+                    streak = 0;
+                    updateStreak();
+                }
+            }
+        }, 80);
+        opponentTimer = setTimeout(() => {
+            clearInterval(opponentInterval);
+            if (problemActive) {
+                problemActive = false;
+                opponentStatus.innerText = `🏆 ${randomOpponentName} won!`;
+                const solutionSteps = `Equation: ${currentProblem.text}\nStep 1: Move constant to the right.\nStep 2: Divide by coefficient.\nSolution: x = ${currentProblem.answer}`;
+                lossSolutionDiv.innerHTML = `<strong>Correct solution:</strong><br>${solutionSteps.replace(/\n/g, '<br>')}<br><br>Your answer was: ${answerInput.value.trim() || '(none)'}`;
+                lossModal.style.display = 'flex';
+                streak = 0;
+                updateStreak();
+            }
+        }, delay);
+    }
+
+    function stopOpponentTimerWin() {
+        if (opponentTimer) clearTimeout(opponentTimer);
+        if (opponentInterval) clearInterval(opponentInterval);
+        opponentTimer = null;
+        opponentInterval = null;
+        opponentStatus.innerText = '✅ you solved it!';
+        opponentTimerEl.innerText = '🎉';
+        progressBar.style.width = '0%';
+    }
+
+    function updateStreak() {
+        streakSpan.innerText = streak;
+        currentDiffSpan.innerText = currentDifficulty;
+    }
+
+    function handleCorrect() {
+        if (!problemActive) return;
+        problemActive = false;
+        streak++;
+        updateStreak();
+        stopOpponentTimerWin();
+        addChatMessage(`🎉 Correct, ${userName}!`, false);
+        setTimeout(() => {
+            const newProb = generateRandomProblem();
+            setProblem(newProb);
+            startOpponentTimer(currentDelay);
+        }, 1200);
+    }
+
+    function handleIncorrect() {
+        addChatMessage(`❌ Not quite, ${userName}. The correct answer is ${currentProblem.answer}.`, false);
+        answerInput.value = '';
+        setTimeout(() => {
+            if (problemActive) {
+                const newProb = generateRandomProblem();
+                setProblem(newProb);
+                startOpponentTimer(currentDelay);
+            }
+        }, 800);
+    }
+
+    function startMatch(difficulty) {
+        currentDifficulty = difficulty;
+        currentDelay = delayMap[difficulty];
+        currentDiffSpan.innerText = difficulty;
+        streak = 0;
+        updateStreak();
+        setProblem(generateRandomProblem());
+        startOpponentTimer(currentDelay);
+        addChatMessage(`👋 Hi ${userName}! You're facing ${randomOpponentName}. Good luck!`, false);
+    }
+
+    document.querySelectorAll('.difficulty-buttons button').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const diff = e.target.dataset.diff;
+            difficultyModal.style.display = 'none';
+            startMatch(diff);
+        });
+    });
+    document.getElementById('closeModalLater').addEventListener('click', () => {
+        difficultyModal.style.display = 'none';
+        startMatch('easy');
+    });
+    difficultyModal.addEventListener('click', (e) => {
+        if (e.target === difficultyModal) {
+            difficultyModal.style.display = 'none';
+            startMatch('easy');
+        }
+    });
+    continueBtn.addEventListener('click', () => {
+        lossModal.style.display = 'none';
+        setProblem(generateRandomProblem());
+        startOpponentTimer(currentDelay);
+    });
+    menuBtn.addEventListener('click', () => { window.location.href = 'index.html'; });
+
+    submitBtn.addEventListener('click', () => {
+        const userAns = parseFloat(answerInput.value.trim());
+        if (isNaN(userAns)) {
+            addChatMessage(`🔢 ${userName}, please type a number.`, false);
+            return;
+        }
+        if (userAns === currentProblem.answer) handleCorrect();
+        else handleIncorrect();
+    });
+
+    newProblemBtn.addEventListener('click', () => {
+        const newProb = generateRandomProblem();
+        setProblem(newProb);
+        startOpponentTimer(currentDelay);
+    });
+
+    chatSend.addEventListener('click', () => {
+        const text = chatInput.value.trim();
+        if (!text) return;
+        addChatMessage('🧑‍🎓 ' + text, true);
+        chatInput.value = '';
+        setTimeout(() => {
+            let reply = '';
+            const lower = text.toLowerCase();
+            if (lower.includes('hint') || lower.includes('help')) reply = getContextualHint();
+            else if (lower.includes('thank')) reply = `😊 You're welcome, ${userName}!`;
+            else reply = `🤖 ${userName}, ask for a hint or keep solving!`;
+            addChatMessage(reply, false);
+        }, 400);
+    });
+
+    hintButton.addEventListener('click', () => addChatMessage('💡 ' + getContextualHint(), false));
+    chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') chatSend.click(); });
+    answerInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') submitBtn.click(); });
+})();
+</script>
+</body>
+</html>
